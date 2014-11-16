@@ -10,6 +10,8 @@ import java.sql.*;
  *
  * @author Drew Jenney
  */
+
+// this is a comment
 public class StandardQueries {
     
     Connection conn;
