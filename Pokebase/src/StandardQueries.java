@@ -12,6 +12,8 @@ import java.sql.*;
  */
 
 // this is a comment
+// this is a second comment
+
 public class StandardQueries {
     
     Connection conn;
