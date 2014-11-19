@@ -10,15 +10,6 @@ public class Main {
 	public static void main(String[] args) throws Exception	{
         
         StandardQueries std = new StandardQueries();
-        
-        /*
-        ResultSet set = std.searchHabitat("Grasslands");
-        
-        while (set.next()) {
-        	System.out.println(set.getString("Id"));
-        }
-        */
-       
        
         SearchPanel pane = new SearchPanel(std);
         

@@ -1,5 +1,6 @@
 import java.sql.ResultSet;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -18,7 +19,7 @@ public class SearchPanel extends javax.swing.JPanel {
 
     StandardQueries std;
     boolean searchMode = true;
-    Object[] SearchList = {"Show All", "Name", "Type", "Number", "Habitat"};
+    Object[] SearchList = {"Show All", "Name", "Type", "Habitat", "Number",};
     Object[] TeamList = {};
     
     /**
@@ -31,7 +32,6 @@ public class SearchPanel extends javax.swing.JPanel {
         AddListeners();
         setSearchTable();
         
-        this.jButton1.setVisible(!searchMode);
         this.jButton2.setVisible(!searchMode);
         this.jButton3.setVisible(!searchMode);
         this.jButton4.setVisible(!searchMode);
@@ -56,17 +56,18 @@ public class SearchPanel extends javax.swing.JPanel {
     public void changeMode() {
             if(searchMode) {
                 searchMode = false;
-                this.jButton5.setText("Search");
+                this.jButton5.setText("Search Page");
+                this.jButton1.setText("Add Pokemon");
                 this.jComboBox1.setModel(new DefaultComboBoxModel());
                 setTeamTable();
             } else {
                 searchMode = true;
-                this.jButton5.setText("Teams");
+                this.jButton5.setText("Teams Page");
+                this.jButton1.setText("Search Pokemon");
                 this.jComboBox1.setModel(new DefaultComboBoxModel(SearchList));
                 setSearchTable();
             }
             
-            this.jButton1.setVisible(!searchMode);
             this.jButton2.setVisible(!searchMode);
             this.jButton3.setVisible(!searchMode);
             this.jButton4.setVisible(!searchMode);
@@ -163,7 +164,7 @@ public class SearchPanel extends javax.swing.JPanel {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Pokebase");
 
-        jButton1.setText("Add Pokemon");
+        jButton1.setText("Search Pokemon");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -274,7 +275,49 @@ public class SearchPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        if(searchMode) {
+            ResultSet tableResults;
+            
+            switch(jComboBox1.getSelectedIndex()) {
+                case 1: //search by name
+                    tableResults = std.searchName(jTextField1.getText());
+                    break;
+                case 2: //search by type
+                    tableResults = std.searchType(jTextField1.getText());
+                    break;
+                case 3: //search by habitat
+                    tableResults = std.searchHabitat(jTextField1.getText());
+                    break;
+                case 4: //search by number
+                    tableResults = std.searchNumber(Integer.parseInt(jTextField1.getText()));
+                    break;
+                default: // show all
+                    tableResults = std.getGeneralInfo();
+            }
+            //repopulate Table
+            try {
+                
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                model.setRowCount(0);
+                while(tableResults.next()) {
+                    model.addRow(new Object[]{tableResults.getInt("ID"), 
+                    tableResults.getObject("Name"), 
+                    tableResults.getObject("Type1Name"),
+                    tableResults.getObject("Type2Name"),
+                    tableResults.getObject("Height"),
+                    tableResults.getObject("Weight"),
+                    tableResults.getObject("Hab"),
+                    tableResults.getObject("EvolvesFrom")
+                    });
+                }
+                repaint();
+            } catch (Exception ex){
+                System.out.println(ex.getMessage());
+            }
+            
+        } else {
+            
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -292,6 +335,10 @@ public class SearchPanel extends javax.swing.JPanel {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         changeMode();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    public JButton getjButton1() {
+        return jButton1;
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
