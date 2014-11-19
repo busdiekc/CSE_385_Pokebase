@@ -1,6 +1,7 @@
 
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.table.DefaultTableModel;
 
@@ -26,11 +27,36 @@ public class PokemonDetail extends javax.swing.JDialog {
         this.std = std;
         this.pokemonID = pokemonID;
         
+        populateHeader();
+        
         jTable1.setTableHeader(null);
         populateDetail();
         
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.setVisible(true);
+    }
+    
+    void populateHeader() {
+        //try to fill in name on detail
+        try {
+        Statement header = std.conn.createStatement();
+        ResultSet rs = header.executeQuery("SELECT name FROM Pokemon WHERE ID = "+pokemonID);
+        
+        rs.next();
+        
+        jLabel3.setText(rs.getString("Name"));
+        } catch (Exception ex) {
+            System.err.print(ex.getMessage());
+        }
+        
+        //try to pull sprites for pokemon
+        try {
+            ManipulateSprites ms = new ManipulateSprites();
+            jLabel1.setIcon(new ImageIcon(ms.generateImage(ms.retrieveASprite(pokemonID))));
+            jLabel2.setIcon(new ImageIcon(ms.generateImage(ms.retrieveAShinySprite(pokemonID))));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
     
     void populateDetail() {
@@ -41,9 +67,9 @@ public class PokemonDetail extends javax.swing.JDialog {
     void setTableDefaults() {
         DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
         model.setValueAt("HP:", 0, 0);
-        model.setValueAt("Att:", 1, 0);
+        model.setValueAt("Atk:", 1, 0);
         model.setValueAt("Def:", 2, 0);
-        model.setValueAt("Sp.Att:", 3, 0);
+        model.setValueAt("Sp.Atk:", 3, 0);
         model.setValueAt("Sp.Def:", 4, 0);
         model.setValueAt("Spd:", 5, 0);
     }
@@ -51,14 +77,14 @@ public class PokemonDetail extends javax.swing.JDialog {
     void populateTable() {
         try {
             Statement pokemon = std.conn.createStatement();
-            ResultSet pokemonInfo = pokemon.executeQuery("SELECT * FROM STATS WHERE PokemonID = "+pokemonID);
-            pokemonInfo.first();
+            ResultSet pokemonInfo = pokemon.executeQuery("SELECT * FROM STATS WHERE pokemonID = "+pokemonID);
+            pokemonInfo.next();
             
             DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
             model.setValueAt(pokemonInfo.getInt("HP"), 0, 1);
-            model.setValueAt(pokemonInfo.getInt("Att"), 1, 1);
+            model.setValueAt(pokemonInfo.getInt("Atk"), 1, 1);
             model.setValueAt(pokemonInfo.getInt("Def"), 2, 1);
-            model.setValueAt(pokemonInfo.getInt("SpAtt"), 3, 1);
+            model.setValueAt(pokemonInfo.getInt("SpAtk"), 3, 1);
             model.setValueAt(pokemonInfo.getInt("SpDef"), 4, 1);
             model.setValueAt(pokemonInfo.getInt("Spd"), 5, 1);
             
@@ -95,7 +121,7 @@ public class PokemonDetail extends javax.swing.JDialog {
                 {null, null}
             },
             new String [] {
-                "Title 1", "Title 2"
+                "Attribute", "Value"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -113,11 +139,13 @@ public class PokemonDetail extends javax.swing.JDialog {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
         }
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("jLabel3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

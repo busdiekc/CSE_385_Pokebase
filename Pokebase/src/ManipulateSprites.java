@@ -60,7 +60,7 @@ public class ManipulateSprites {
 	}
 	
 	// used to retrieve just the sprite of a single pokemon
-	private byte[] retrieveASprite(int pokemonID) throws SQLException {
+	public byte[] retrieveASprite(int pokemonID) throws SQLException {
 		
 		byte[] sprite = null;
 		
@@ -74,7 +74,7 @@ public class ManipulateSprites {
 	}
 	
 	// used to retrieve just the shiny sprite of a single pokemon
-	private byte[] retrieveAShinySprite(int pokemonID) throws SQLException {
+	public byte[] retrieveAShinySprite(int pokemonID) throws SQLException {
 		
 		byte[] shinySprite = null;
 		
@@ -88,7 +88,7 @@ public class ManipulateSprites {
 	}
 	
 	// used to convert a retrieved pokemon's sprite or shiny sprite into a usable image
-	private BufferedImage generateImage(byte[] spriteArray) throws IOException {
+	public BufferedImage generateImage(byte[] spriteArray) throws IOException {
 		
 		InputStream arrayIn = new ByteArrayInputStream(spriteArray);
 		
