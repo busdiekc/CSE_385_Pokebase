@@ -117,7 +117,7 @@ public class StandardQueries {
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
-                                + "WHERE Type1Name = '"+type+"' OR Type2Name = '"+type+"'";
+                                + "WHERE Type1Name LIKE '%"+type+"%' OR Type2Name = '%"+type+"%'";
     		
     		return search.executeQuery(query);
     		
@@ -143,7 +143,7 @@ public class StandardQueries {
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
-                                + "WHERE Hab LIKE '%" +habitat +"%'";
+                                + "WHERE Hab LIKE '%" +habitat.replace("'", "''") +"%'";
     		
     		return search.executeQuery(query);
     		
@@ -151,5 +151,29 @@ public class StandardQueries {
     		e.printStackTrace();
     		return null;
     	}
+    }
+    
+    ResultSet getTeams() {
+        try {
+            Statement teams = this.conn.createStatement();
+            String query = "SELECT * FROM TEAMS";
+
+            return teams.executeQuery(query);
+        } catch(Exception ex) {
+            System.err.println(ex.getMessage());
+            return null;
+        }
+    }
+    
+    ResultSet getTeam(int teamID) {
+        try {
+            Statement team = this.conn.createStatement();
+            String query = "SELECT * FROM TEAMS WHERE TeamID = "+teamID;
+
+            return team.executeQuery(query);
+        } catch(Exception ex) {
+            System.err.println(ex.getMessage());
+            return null;
+        }
     }
 }

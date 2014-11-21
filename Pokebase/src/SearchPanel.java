@@ -1,3 +1,6 @@
+import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.ResultSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -38,18 +41,36 @@ public class SearchPanel extends javax.swing.JPanel {
     }
     
     void AddListeners() {
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if(evt.getClickCount() == 2) {
-                    int row = jTable1.rowAtPoint(evt.getPoint());
-                    int col = jTable1.columnAtPoint(evt.getPoint());
-                    if (row >= 0 && col >= 0) {
-                        new PokemonDetail(null, std, (int)jTable1.getModel().getValueAt(row, 0));
+            jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    if(evt.getClickCount() == 2) {
+                        int row = jTable1.rowAtPoint(evt.getPoint());
+                        int col = jTable1.columnAtPoint(evt.getPoint());
+                        if (row >= 0 && col >= 0) {
+                            new PokemonDetail(null, std, (int)jTable1.getModel().getValueAt(row, 0));
+                        }
                     }
                 }
-            }
-        });
+            });
+        
+        for(Component comp : this.getComponents()) {
+            comp.addKeyListener(new KeyListener() {
+
+                @Override
+                public void keyTyped(KeyEvent e) {}
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                  if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+                      jButton1.doClick();
+                  }
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {}
+            });
+        }
     }
     
     // switch from Search to Team mode or vice versa
