@@ -101,8 +101,8 @@ public class SearchPanel extends javax.swing.JPanel {
         this.jTable1.getTableHeader().getColumnModel().getColumn(1).setHeaderValue("Name");
         this.jTable1.getTableHeader().getColumnModel().getColumn(2).setHeaderValue("Type 1");
         this.jTable1.getTableHeader().getColumnModel().getColumn(3).setHeaderValue("Type 2");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(4).setHeaderValue("Height");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(5).setHeaderValue("Weight");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(4).setHeaderValue("Height (inches)");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(5).setHeaderValue("Weight (pounds)");
         this.jTable1.getTableHeader().getColumnModel().getColumn(6).setHeaderValue("Habitat");
         this.jTable1.getTableHeader().getColumnModel().getColumn(7).setHeaderValue("Evolves From");
         
