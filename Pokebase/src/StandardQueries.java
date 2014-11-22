@@ -56,6 +56,7 @@ public class StandardQueries {
      * @return
      */
     ResultSet searchName(String name) {
+    	
     	try {
     		Statement search = this.conn.createStatement();
     		String query = "SELECT ID, Name, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
@@ -65,7 +66,7 @@ public class StandardQueries {
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
-                                + "WHERE Name LIKE '%"+ name + "%'";
+                                + "WHERE Name LIKE '%"+ name.toLowerCase() + "%'";
     		
     		return search.executeQuery(query);
     		
@@ -117,7 +118,7 @@ public class StandardQueries {
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
-                                + "WHERE Type1Name LIKE '%"+type+"%' OR Type2Name = '%"+type+"%'";
+                                + "WHERE Type1Name LIKE '%"+type.toLowerCase()+"%' OR Type2Name = '%"+type.toLowerCase()+"%'";
     		
     		return search.executeQuery(query);
     		
@@ -153,6 +154,19 @@ public class StandardQueries {
     	}
     }
     
+    ResultSet getAllTeamInfo() {
+    	try {
+    		Statement st = this.conn.createStatement();
+    		String query = "SELECT teamname, size FROM teamnames "
+    				+ "JOIN (SELECT teamid as tid, COUNT(pokemonid) as size FROM teams GROUP BY teamid) on teamnames.teamid = tid";
+    		
+    		return st.executeQuery(query);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
+    
     ResultSet getTeams() {
         try {
             Statement teams = this.conn.createStatement();
@@ -165,15 +179,27 @@ public class StandardQueries {
         }
     }
     
-    ResultSet getTeam(int teamID) {
+    ResultSet getAllTeamNames() {
         try {
             Statement team = this.conn.createStatement();
-            String query = "SELECT * FROM TEAMS WHERE TeamID = "+teamID;
+            String query = "SELECT * FROM teamnames";
 
             return team.executeQuery(query);
         } catch(Exception ex) {
             System.err.println(ex.getMessage());
             return null;
         }
+    }
+    
+    ResultSet getTeamSize() {
+    	try {
+    		Statement getSize = this.conn.createStatement();
+    		String query = "SELECT COUNT(pokemonid) as size FROM teams GROUP BY teamid";
+    		
+    		return getSize.executeQuery(query);
+    	} catch (Exception e) { 
+    		e.printStackTrace();
+    		return null;
+    	}
     }
 }

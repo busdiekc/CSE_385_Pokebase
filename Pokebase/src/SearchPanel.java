@@ -149,7 +149,22 @@ public class SearchPanel extends javax.swing.JPanel {
     }
     
     void refreshTeamTable() {
-     
+    	try {
+    		DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    		model.setRowCount(0);
+    		
+    		ResultSet allTeamInfo= std.getAllTeamInfo();
+    	
+    		while (allTeamInfo.next()) {
+    			model.addRow(new Object[] { allTeamInfo.getObject("teamname"), allTeamInfo.getInt("size") });
+    		}
+    		
+    		
+    		
+    		
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
 
     /**
