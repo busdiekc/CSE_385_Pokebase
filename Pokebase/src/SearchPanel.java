@@ -6,8 +6,11 @@ import java.sql.ResultSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+<<<<<<< HEAD
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+=======
+>>>>>>> e22007b8f9bf06f39874f65b012d588a62778847
 import javax.swing.table.DefaultTableModel;
 
 
@@ -48,7 +51,7 @@ public class SearchPanel extends javax.swing.JPanel {
             jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    if(evt.getClickCount() == 2) {
+                    if(evt.getClickCount() == 2 && searchMode) {
                         int row = jTable1.rowAtPoint(evt.getPoint());
                         int col = jTable1.columnAtPoint(evt.getPoint());
                         if (row >= 0 && col >= 0) {
@@ -362,6 +365,7 @@ public class SearchPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+<<<<<<< HEAD
         // TODO add your handling code here:
     	
     	String response = JOptionPane.showInputDialog(null, "Please enter the name of the team: ");
@@ -370,16 +374,27 @@ public class SearchPanel extends javax.swing.JPanel {
     	std.addTeam(response);
     	
     	refreshTeamTable();
+=======
+        String teamName = JOptionPane.showInputDialog(this, "Please Enter the name of your new team");
+    	std.addTeam(teamName);
+>>>>>>> e22007b8f9bf06f39874f65b012d588a62778847
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    	std.removePokemonFromTeam("test team", 1);
+        try {
+            String teamName = (String)jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0);
+            ResultSet pokemon =  std.searchName((String)jTable1.getModel().getValueAt(jTable1.getSelectedRow(), jTable1.getSelectedColumn()));
+            std.removePokemonFromTeam(teamName, pokemon.getInt("ID"));
+            
+            refreshTeamTable();
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    	std.removeTeam("hello");
+    std.removeTeam((String)jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0));
+    refreshTeamTable();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
