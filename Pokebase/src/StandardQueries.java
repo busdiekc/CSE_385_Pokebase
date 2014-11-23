@@ -170,16 +170,16 @@ public class StandardQueries {
     void addPokemonToTeam (String teamName, int pokemonID) {
     	try {
     		Statement getTeamID = this.conn.createStatement();
-    		String q = "SELECT teamid FROM teamnames WHERE teamname = " + teamName;
+    		String q = "SELECT teamid FROM teamnames WHERE teamname = '" + teamName + "'";
     		
     		ResultSet id = getTeamID.executeQuery(q);
-    		int teamID = id.getInt(0);
+    		int teamID = id.getInt(1);
     		
     		
     		Statement add = this.conn.createStatement();
     		String query = "INSERT INTO teams VALUES (" + teamID + ", " + pokemonID + ")";
     		
-    		add.executeQuery(query);
+    		add.executeUpdate(query);
     		
     	} catch (Exception e) { 
     		e.printStackTrace();
@@ -189,16 +189,16 @@ public class StandardQueries {
     void removePokemonFromTeam (String teamName, int pokemonID) {
     	try {
     		Statement getTeamID = this.conn.createStatement();
-    		String q = "SELECT teamid FROM teamnames WHERE teamname = " + teamName;
+    		String q = "SELECT teamid FROM teamnames WHERE teamname = '" + teamName + "'";
     		
     		ResultSet id = getTeamID.executeQuery(q);
-    		int teamID = id.getInt(0);
+    		int tid = id.getInt(1);
     		
     		
     		Statement remove = this.conn.createStatement();
-    		String query = "DELETE FROM teams WHERE teams.teamID = " + teamID + " AND " + "teams.pokemonid = " + pokemonID;
+    		String query = "DELETE FROM teams WHERE teamID = " + tid + " AND " + "pokemonid = " + pokemonID;
     		
-    		remove.executeQuery(query);
+    		remove.executeUpdate(query);
     		
     	} catch (Exception e ) {
     		e.printStackTrace();
@@ -208,9 +208,9 @@ public class StandardQueries {
     void addTeam (String name) {
     	try {
     		Statement add = this.conn.createStatement();
-    		String query = "INSERT INTO teamnames (teamname) VALUES (name)";
+    		String query = "INSERT INTO teamnames (teamname) VALUES ('" + name + "')";
     		
-    		add.executeQuery(query);
+    		add.executeUpdate(query);
     		
     	} catch (Exception e) { 
     		e.printStackTrace();
@@ -220,22 +220,22 @@ public class StandardQueries {
     void removeTeam (String name) {
     	try {
     		Statement findTeamID = this.conn.createStatement();
-    		String q = "SELECT teamid FROM teamnames WHERE teamname = " + name;
+    		String q = "SELECT teamid FROM teamnames WHERE teamname = '" + name + "'";
     		
     		ResultSet teamid = findTeamID.executeQuery(q);
-    		int id = teamid.getInt(0);
+    		int id = teamid.getInt(1);
     		
     		Statement deletePokemonFromTeam = this.conn.createStatement();
     		String qq = "DELETE FROM teams WHERE teamid = " + id;
     		
-    		deletePokemonFromTeam.executeQuery(qq);
+    		deletePokemonFromTeam.executeUpdate(qq);
     		
     		
     		
     		Statement remove = this.conn.createStatement();
     		String query = "DELETE FROM teamnames WHERE teamnames.teamid = " + id;
     		
-    		remove.executeQuery(query);
+    		remove.executeUpdate(query);
     		
     	} catch (Exception e ) {
     		e.printStackTrace();
