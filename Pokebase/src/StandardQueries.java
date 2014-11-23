@@ -167,39 +167,79 @@ public class StandardQueries {
     	}
     }
     
-    ResultSet getTeams() {
-        try {
-            Statement teams = this.conn.createStatement();
-            String query = "SELECT * FROM TEAMS";
-
-            return teams.executeQuery(query);
-        } catch(Exception ex) {
-            System.err.println(ex.getMessage());
-            return null;
-        }
-    }
-    
-    ResultSet getAllTeamNames() {
-        try {
-            Statement team = this.conn.createStatement();
-            String query = "SELECT * FROM teamnames";
-
-            return team.executeQuery(query);
-        } catch(Exception ex) {
-            System.err.println(ex.getMessage());
-            return null;
-        }
-    }
-    
-    ResultSet getTeamSize() {
+    void addPokemonToTeam (String teamName, int pokemonID) {
     	try {
-    		Statement getSize = this.conn.createStatement();
-    		String query = "SELECT COUNT(pokemonid) as size FROM teams GROUP BY teamid";
+    		Statement getTeamID = this.conn.createStatement();
+    		String q = "SELECT teamid FROM teamnames WHERE teamname = " + teamName;
     		
-    		return getSize.executeQuery(query);
+    		ResultSet id = getTeamID.executeQuery(q);
+    		int teamID = id.getInt(0);
+    		
+    		
+    		Statement add = this.conn.createStatement();
+    		String query = "INSERT INTO teams VALUES (" + teamID + ", " + pokemonID + ")";
+    		
+    		add.executeQuery(query);
+    		
     	} catch (Exception e) { 
     		e.printStackTrace();
-    		return null;
     	}
     }
+    
+    void removePokemonFromTeam (String teamName, int pokemonID) {
+    	try {
+    		Statement getTeamID = this.conn.createStatement();
+    		String q = "SELECT teamid FROM teamnames WHERE teamname = " + teamName;
+    		
+    		ResultSet id = getTeamID.executeQuery(q);
+    		int teamID = id.getInt(0);
+    		
+    		
+    		Statement remove = this.conn.createStatement();
+    		String query = "DELETE FROM teams WHERE teams.teamID = " + teamID + " AND " + "teams.pokemonid = " + pokemonID;
+    		
+    		remove.executeQuery(query);
+    		
+    	} catch (Exception e ) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    void addTeam (String name) {
+    	try {
+    		Statement add = this.conn.createStatement();
+    		String query = "INSERT INTO teamnames (teamname) VALUES (name)";
+    		
+    		add.executeQuery(query);
+    		
+    	} catch (Exception e) { 
+    		e.printStackTrace();
+    	}
+    }
+    
+    void removeTeam (String name) {
+    	try {
+    		Statement findTeamID = this.conn.createStatement();
+    		String q = "SELECT teamid FROM teamnames WHERE teamname = " + name;
+    		
+    		ResultSet teamid = findTeamID.executeQuery(q);
+    		int id = teamid.getInt(0);
+    		
+    		Statement deletePokemonFromTeam = this.conn.createStatement();
+    		String qq = "DELETE FROM teams WHERE teamid = " + id;
+    		
+    		deletePokemonFromTeam.executeQuery(qq);
+    		
+    		
+    		
+    		Statement remove = this.conn.createStatement();
+    		String query = "DELETE FROM teamnames WHERE teamnames.teamid = " + id;
+    		
+    		remove.executeQuery(query);
+    		
+    	} catch (Exception e ) {
+    		e.printStackTrace();
+    	}
+    }
+
 }
