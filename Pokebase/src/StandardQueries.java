@@ -185,13 +185,19 @@ public class StandardQueries {
     	}
     }
     
-    void addPokemonToTeam (String teamName, int pokemonID) {
+    void addPokemonToTeam (String teamName, String pokemonName) {
     	try {
     		Statement getTeamID = this.conn.createStatement();
     		String q = "SELECT teamid FROM teamnames WHERE teamname = '" + teamName + "'";
     		
     		ResultSet id = getTeamID.executeQuery(q);
     		int teamID = id.getInt(1);
+    		
+    		Statement getPokemonID = this.conn.createStatement();
+    		String qqq = "SELECT id FROM pokemon where name = '" + pokemonName + "'";
+    		
+    		ResultSet pokemonid = getPokemonID.executeQuery(qqq);
+    		int pokemonID = pokemonid.getInt(1);
     		
     		
     		Statement add = this.conn.createStatement();
@@ -204,13 +210,20 @@ public class StandardQueries {
     	}
     }
     
-    void removePokemonFromTeam (String teamName, int pokemonID) {
+    void removePokemonFromTeam (String teamName, String pokemonName) {
     	try {
     		Statement getTeamID = this.conn.createStatement();
     		String q = "SELECT teamid FROM teamnames WHERE teamname = '" + teamName + "'";
     		
     		ResultSet id = getTeamID.executeQuery(q);
     		int tid = id.getInt(1);
+    		
+    		
+    		Statement getPokemonID = this.conn.createStatement();
+    		String qq = "SELECT id FROM pokemon where name = '" + pokemonName + "'";
+    		ResultSet pid = getPokemonID.executeQuery(qq);
+    		int pokemonID = pid.getInt(1);
+    		
     		
     		
     		Statement remove = this.conn.createStatement();

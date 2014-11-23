@@ -375,7 +375,11 @@ public class SearchPanel extends javax.swing.JPanel {
             }
             
         } else {
-            std.addPokemonToTeam("the mighty ducks", 2);
+        	String teamName = JOptionPane.showInputDialog(null, "Please enter the team name: ");
+        	String pokemonName = JOptionPane.showInputDialog(null, "Please enter pokemon name: ");
+        	
+            std.addPokemonToTeam(teamName, pokemonName);
+            refreshTeamTable();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -391,15 +395,11 @@ public class SearchPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        try {
-            String teamName = (String)jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0);
-            ResultSet pokemon =  std.searchName((String)jTable1.getModel().getValueAt(jTable1.getSelectedRow(), jTable1.getSelectedColumn()));
-            std.removePokemonFromTeam(teamName, pokemon.getInt("ID"));
-            
-            refreshTeamTable();
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        }
+        String teamName = JOptionPane.showInputDialog(null, "Please enter the name of the team: ");
+        String pokemonName = JOptionPane.showInputDialog(null, "Please enter the name of the pokemon: ");
+        
+        std.removePokemonFromTeam(teamName, pokemonName);
+        refreshTeamTable();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
