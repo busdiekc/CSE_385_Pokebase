@@ -160,9 +160,24 @@ public class SearchPanel extends javax.swing.JPanel {
     		model.setRowCount(0);
     		
     		ResultSet allTeamInfo= std.getAllTeamInfo();
-    	
+    		ResultSet members;
+    		Object[] row;
+    		
     		while (allTeamInfo.next()) {
-    			model.addRow(new Object[] { allTeamInfo.getObject("teamname"), allTeamInfo.getInt("size") });
+    			
+    			row = new Object[allTeamInfo.getInt("size") +2];
+    			members = std.getTeamMembers((String) allTeamInfo.getObject("teamname"));
+    			members.next();
+    			
+    			row[0] = allTeamInfo.getObject("teamname");
+    			row[1] = allTeamInfo.getObject("size");
+    			
+    			for(int i = 0; i < allTeamInfo.getInt("size"); i++){
+    				row[i+2] = members.getString("Name");
+    				members.next();
+    			}
+    			
+    			model.addRow(row);
     		}
     		
     		

@@ -154,6 +154,23 @@ public class StandardQueries {
     	}
     }
     
+    ResultSet getTeamMembers(String teamName) {
+    	try {
+    		Statement st = this.conn.createStatement();
+    		String query = "SELECT Name "
+    				+ " FROM Pokemon "
+    				+ "JOIN Teams ON ID = PokemonID "
+    				+ "WHERE TeamID = ( "
+    				+ "SELECT teamID FROM teamNames where teamName = '" + teamName + "')";
+    		
+    		return st.executeQuery(query);
+    		
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
+    
     ResultSet getAllTeamInfo() {
     	try {
     		Statement st = this.conn.createStatement();
