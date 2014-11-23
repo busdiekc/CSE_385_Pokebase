@@ -158,9 +158,10 @@ public class StandardQueries {
     	try {
     		Statement st = this.conn.createStatement();
     		String query = "SELECT teamname, size FROM teamnames "
-    				+ "JOIN (SELECT teamid as tid, COUNT(pokemonid) as size FROM teams GROUP BY teamid) on teamnames.teamid = tid";
+    				+ "LEFT OUTER JOIN (SELECT teamid as tid, COUNT(pokemonid) as size FROM teams GROUP BY teamid) on teamnames.teamid = tid";
     		
     		return st.executeQuery(query);
+    		
     	} catch (Exception e) {
     		e.printStackTrace();
     		return null;
