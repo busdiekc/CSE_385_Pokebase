@@ -1,0 +1,7 @@
+CSE_385_Pokebase 
+================
+
+Official Bug List
+-------------------------------------------------
+1. Clicking cancel on the Add Team popup adds a team with teamname "null".
+2. Clicking cancel on the Add Pokemon popup throws a ResultSet Closed Error.
