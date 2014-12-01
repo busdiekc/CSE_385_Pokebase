@@ -1,0 +1,9 @@
+CSE_385_Pokebase 
+================
+
+Official Bug List
+-------------------------------------------------
+1. Clicking cancel on the Add Team popup adds a team with teamname "null".
+2. Clicking cancel on the Add Pokemon popup throws a ResultSet Closed Error.
+3. Not spelling a pokemon's name when adding or deleting throws exceptions.
+4. (Minor) Searching for the habitat "water's edge" doesn't return any results
