@@ -118,7 +118,7 @@ public class StandardQueries {
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
-                                + "WHERE Type1Name LIKE '%"+type.toLowerCase()+"%' OR Type2Name = '%"+type.toLowerCase()+"%'";
+                                + "WHERE Type1Name LIKE '%"+type.toLowerCase()+"%' OR Type2Name LIKE '%"+type.toLowerCase()+"%'";
     		
     		return search.executeQuery(query);
     		
