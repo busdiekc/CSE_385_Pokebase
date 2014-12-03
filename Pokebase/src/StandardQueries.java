@@ -32,14 +32,15 @@ public class StandardQueries {
     ResultSet getGeneralInfo() {
     	try {
     		Statement search = this.conn.createStatement();
-    		String query = "SELECT ID, Name, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
+    		String query = "SELECT ID, Picture, Name, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
     				+ "FROM pokemon "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T1, Name AS Type1Name FROM types) on type1 = t1 "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T2, Name AS Type2Name FROM Types) ON type2 = t2 "
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
-    				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid";
-    		
+    				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
+                    + "JOIN (SELECT PokemonID, Picture FROM Sprites) ON PokemonID = Pokemon.ID ";
+                
     		return search.executeQuery(query);
     		
     	} catch (SQLException e) {
@@ -59,14 +60,15 @@ public class StandardQueries {
     	
     	try {
     		Statement search = this.conn.createStatement();
-    		String query = "SELECT ID, Name, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
+    		String query = "SELECT ID, Name, Picture, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
     				+ "FROM pokemon "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T1, Name AS Type1Name FROM types) on type1 = t1 "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T2, Name AS Type2Name FROM Types) ON type2 = t2 "
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
-                                + "WHERE Name LIKE '%"+ name.toLowerCase() + "%'";
+                    + "JOIN (SELECT PokemonID, Picture FROM Sprites) ON PokemonID = Pokemon.ID "
+                    + "WHERE Name LIKE '%"+ name.toLowerCase() + "%'";
     		
     		return search.executeQuery(query);
     		
@@ -85,13 +87,14 @@ public class StandardQueries {
     ResultSet searchNumber(int num) {
     	try {
     		Statement search = this.conn.createStatement();
-    		String query = "SELECT ID, Name, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
+    		String query = "SELECT ID, Name, Picture, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
     				+ "FROM pokemon "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T1, Name AS Type1Name FROM types) on type1 = t1 "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T2, Name AS Type2Name FROM Types) ON type2 = t2 "
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
+                                + "JOIN (SELECT PokemonID, Picture FROM Sprites) ON PokemonID = Pokemon.ID "
                                 + "WHERE Pokemon.ID = " +num;
     		
     		return search.executeQuery(query);
@@ -111,13 +114,14 @@ public class StandardQueries {
     ResultSet searchType(String type) {
     	try {
     		Statement search = this.conn.createStatement();
-    		String query = "SELECT ID, Name, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
+    		String query = "SELECT ID, Name, Picture, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
     				+ "FROM pokemon "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T1, Name AS Type1Name FROM types) on type1 = t1 "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T2, Name AS Type2Name FROM Types) ON type2 = t2 "
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
+                                + "JOIN (SELECT PokemonID, Picture FROM Sprites) ON PokemonID = Pokemon.ID "
                                 + "WHERE Type1Name LIKE '%"+type.toLowerCase()+"%' OR Type2Name LIKE '%"+type.toLowerCase()+"%'";
     		
     		return search.executeQuery(query);
@@ -137,13 +141,14 @@ public class StandardQueries {
     ResultSet searchHabitat(String habitat) {
     	try {
     		Statement search = this.conn.createStatement();
-    		String query = "SELECT ID, Name, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
+    		String query = "SELECT ID, Name, Picture, Type1Name, Type2Name, Height, Weight, Hab, evolvesFrom "
     				+ "FROM pokemon "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T1, Name AS Type1Name FROM types) on type1 = t1 "
     				+ "LEFT OUTER JOIN (SELECT TypeID AS T2, Name AS Type2Name FROM Types) ON type2 = t2 "
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
+                                + "JOIN (SELECT PokemonID, Picture FROM Sprites) ON PokemonID = Pokemon.ID "
                                 + "WHERE Hab LIKE '%" +habitat.replace("'", "''") +"%'";
     		
     		return search.executeQuery(query);

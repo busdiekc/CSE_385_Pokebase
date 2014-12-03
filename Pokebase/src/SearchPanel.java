@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -7,11 +8,14 @@ import java.sql.ResultSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -40,12 +44,50 @@ public class SearchPanel extends javax.swing.JPanel {
         initComponents();
         this.std = std;
         
+        
+        setTableDefaults();
         AddListeners();
         setSearchTable();
         
         this.jButton2.setVisible(!searchMode);
         this.jButton3.setVisible(!searchMode);
         this.jButton4.setVisible(!searchMode);
+    }
+    
+    void setTableDefaults() {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
+             @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,boolean hasFocus, int row, int column)
+            {
+                    JLabel label = new JLabel();
+
+                    if (value!=null) {
+                    label.setHorizontalAlignment(JLabel.CENTER);
+                    //value is parameter which filled by byteOfImage
+                        if(column == 2 && searchMode) {
+                            label.setIcon((ImageIcon)value);
+                        } else {
+                            label.setText(value.toString());
+                        }
+                    }
+                    
+                    if(hasFocus || isSelected) {
+                    	label.setOpaque(true);
+                    	label.setBackground(Color.red);
+                    } else {
+                    	label.setOpaque(false);
+                    	label.setBackground(Color.white);
+                    }
+                    
+                    return label;
+            }
+        };
+        jTable1.setSelectionBackground(Color.red);
+        
+        for(int i=0; i<jTable1.getColumnCount(); i++){
+         jTable1.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
+        }
+        
     }
     
     void AddListeners() {
@@ -107,12 +149,13 @@ public class SearchPanel extends javax.swing.JPanel {
         
         this.jTable1.getTableHeader().getColumnModel().getColumn(0).setHeaderValue("Number"); 
         this.jTable1.getTableHeader().getColumnModel().getColumn(1).setHeaderValue("Name");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(2).setHeaderValue("Type 1");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(3).setHeaderValue("Type 2");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(4).setHeaderValue("Height (inches)");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(5).setHeaderValue("Weight (pounds)");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(6).setHeaderValue("Habitat");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(7).setHeaderValue("Evolves From");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(2).setHeaderValue("Sprite");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(3).setHeaderValue("Type 1");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(4).setHeaderValue("Type 2");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(5).setHeaderValue("Height (inches)");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(6).setHeaderValue("Weight (pounds)");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(7).setHeaderValue("Habitat");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(8).setHeaderValue("Evolves From");
         
         refreshSearchTable();
         repaint();
@@ -127,7 +170,8 @@ public class SearchPanel extends javax.swing.JPanel {
         
             while(getAllPokemon.next()) {
                 model.addRow(new Object[]{getAllPokemon.getInt("ID"), 
-                    getAllPokemon.getObject("Name"), 
+                    getAllPokemon.getObject("Name"),
+                    new ImageIcon((byte[])getAllPokemon.getObject("Picture")),
                     getAllPokemon.getObject("Type1Name"),
                     getAllPokemon.getObject("Type2Name"),
                     getAllPokemon.getObject("Height"),
@@ -268,20 +312,21 @@ public class SearchPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Number", "Name", "Type 1", "Type 2", "Height", "Weight", "Habitat", "Evolves From"
+                "Number", "Name", "Sprite", "Type 1", "Type 2", "Height", "Weight", "Habitat", "Evolves From"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setRowHeight(75);
         jTable1.setSelectionBackground(new java.awt.Color(255, 51, 51));
+        jTable1.setShowVerticalLines(false);
         jTable1.setSurrendersFocusOnKeystroke(true);
-        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -303,28 +348,25 @@ public class SearchPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(78, 78, 78))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 772, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -339,15 +381,15 @@ public class SearchPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 377, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -362,7 +404,7 @@ public class SearchPanel extends javax.swing.JPanel {
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(26, 26, 26))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -399,6 +441,7 @@ public class SearchPanel extends javax.swing.JPanel {
                 while(tableResults.next()) {
                     model.addRow(new Object[]{tableResults.getInt("ID"), 
                     tableResults.getObject("Name"), 
+                    new ImageIcon((byte[])tableResults.getObject("Picture")),
                     tableResults.getObject("Type1Name"),
                     tableResults.getObject("Type2Name"),
                     tableResults.getObject("Height"),
