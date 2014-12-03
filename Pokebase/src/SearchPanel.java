@@ -291,7 +291,7 @@ public class SearchPanel extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/English_PokÃ©mon_logo.svg.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/English_Pokémon_logo.svg.png"))); // NOI18N
         jLabel1.setMaximumSize(new java.awt.Dimension(500, 200));
         jLabel1.setMinimumSize(new java.awt.Dimension(500, 200));
         jLabel1.setPreferredSize(new java.awt.Dimension(500, 200));

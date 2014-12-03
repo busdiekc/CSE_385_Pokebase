@@ -158,9 +158,9 @@ public class StandardQueries {
     	try {
     		Statement st = this.conn.createStatement();
     		String query = "SELECT Name "
-    				+ " FROM Pokemon "
+    				+ "FROM Pokemon "
     				+ "JOIN Teams ON ID = PokemonID "
-    				+ "WHERE TeamID = ( "
+    				+ "WHERE TeamID = ("
     				+ "SELECT teamID FROM teamNames where teamName = '" + teamName + "')";
     		
     		return st.executeQuery(query);
