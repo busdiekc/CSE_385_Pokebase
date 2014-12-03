@@ -161,7 +161,7 @@ public class StandardQueries {
     				+ "FROM Pokemon "
     				+ "JOIN Teams ON ID = PokemonID "
     				+ "WHERE TeamID = ("
-    				+ "SELECT teamID FROM teamNames where teamName = '" + teamName + "')";
+    				+ "SELECT teamID FROM teamNames where teamName = '" + teamName.replace("'", "''") + "')";
     		
     		return st.executeQuery(query);
     		
@@ -213,7 +213,7 @@ public class StandardQueries {
     void removePokemonFromTeam (String teamName, String pokemonName) {
     	try {
     		Statement getTeamID = this.conn.createStatement();
-    		String q = "SELECT teamid FROM teamnames WHERE teamname = '" + teamName + "'";
+    		String q = "SELECT teamid FROM teamnames WHERE teamname = '" + teamName.replace("'", "''") + "'";
     		
     		ResultSet id = getTeamID.executeQuery(q);
     		int tid = id.getInt(1);
@@ -239,7 +239,7 @@ public class StandardQueries {
     void addTeam (String name) {
     	try {
     		Statement add = this.conn.createStatement();
-    		String query = "INSERT INTO teamnames (teamname) VALUES ('" + name + "')";
+    		String query = "INSERT INTO teamnames (teamname) VALUES ('" + name.replace("'", "''") + "')";
     		
     		add.executeUpdate(query);
     		
@@ -251,7 +251,7 @@ public class StandardQueries {
     void removeTeam (String name) {
     	try {
     		Statement findTeamID = this.conn.createStatement();
-    		String q = "SELECT teamid FROM teamnames WHERE teamname = '" + name + "'";
+    		String q = "SELECT teamid FROM teamnames WHERE teamname = '" + name.replace("'", "''") + "'";
     		
     		ResultSet teamid = findTeamID.executeQuery(q);
     		int id = teamid.getInt(1);

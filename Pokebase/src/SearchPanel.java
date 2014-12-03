@@ -291,7 +291,7 @@ public class SearchPanel extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/English_Pokémon_logo.svg.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/English_Pokemon_logo.svg.png"))); // NOI18N
         jLabel1.setMaximumSize(new java.awt.Dimension(500, 200));
         jLabel1.setMinimumSize(new java.awt.Dimension(500, 200));
         jLabel1.setPreferredSize(new java.awt.Dimension(500, 200));
@@ -413,11 +413,16 @@ public class SearchPanel extends javax.swing.JPanel {
             }
             
         } else {
-        	String teamName = JOptionPane.showInputDialog(null, "Please enter the team name: ");
-        	String pokemonName = JOptionPane.showInputDialog(null, "Please enter pokemon name: ");
-        	
-            std.addPokemonToTeam(teamName, pokemonName);
-            refreshTeamTable();
+            if(jTable1.getSelectedRow() < 0) {
+                JOptionPane.showMessageDialog(null, "Please select a team to add to!", null, JOptionPane.ERROR_MESSAGE);
+            } else {
+        	String teamName = (String)jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+                
+                String pokemonName = JOptionPane.showInputDialog(null, "Please enter pokemon name: ");
+                std.addPokemonToTeam(teamName, pokemonName);
+            
+                refreshTeamTable();
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -433,17 +438,30 @@ public class SearchPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String teamName = JOptionPane.showInputDialog(null, "Please enter the name of the team: ");
-        String pokemonName = JOptionPane.showInputDialog(null, "Please enter the name of the pokemon: ");
+        if(jTable1.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a team to remove from!", null, JOptionPane.ERROR_MESSAGE);
+        } else {
+        
+        String teamName = (String)jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+        String pokemonName = JOptionPane.showInputDialog(null, "Please enter the name of the pokemon to remove from "+teamName);
         
         std.removePokemonFromTeam(teamName, pokemonName);
         refreshTeamTable();
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-    	String response = JOptionPane.showInputDialog(null, "Please enter the name of the team to delete: ");
-    	std.removeTeam(response);
+    	if(jTable1.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Please select a team to remove!", null, JOptionPane.ERROR_MESSAGE);
+        } else {
+        
+        String teamName = (String)jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+        int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete "+teamName+"?");
+    	if (response == 0) {
+            std.removeTeam(teamName);
+        }
     	refreshTeamTable();
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
