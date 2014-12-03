@@ -29,7 +29,7 @@ public class PokemonDetail extends javax.swing.JDialog {
         
         populateHeader();
         
-        jTable1.setTableHeader(null);
+        //jTable1.setTableHeader(null);
         populateDetail();
         
         this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
