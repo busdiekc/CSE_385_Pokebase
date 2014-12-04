@@ -43,8 +43,8 @@ public class ManipulateSprites {
 	// used to insert the sprite and shiny sprite of a single pokemon
 	private void insertSprites(int pokemonID, String pokemonName) throws FileNotFoundException, SQLException {
 		
-		File pic = new File("C:/Pokemon_Sprites/" + pokemonName + ".png");
-		File shinyPic = new File("C:/Pokemon_Sprites/" + pokemonName + ".png");
+		File pic = new File("C:/PokemonSprites/" + pokemonName + ".png");
+		File shinyPic = new File("C:/PokemonSprites/" + pokemonName + "2.png");
 		
 		InputStream picStream = new FileInputStream(pic);
 		InputStream shinyPicStream = new FileInputStream(shinyPic);
@@ -99,7 +99,7 @@ public class ManipulateSprites {
 	}
 	
 	// automates the insertion of the first 151 pokemon into the Pokebase database
-	private void insertAllSprites() throws FileNotFoundException, SQLException {
+	public void insertAllSprites() throws FileNotFoundException, SQLException {
 		
 		// an array to hold the 151 unique pokemonID's
 		int[] pokemonIDs = new int[152];
@@ -110,27 +110,22 @@ public class ManipulateSprites {
 		// fills the array with the correct pokemonID numbers
 		// there is not a pokemon with ID of 0 so it is unused
 		for (int i = 1; i < 152; i++)
-			pokemonIDs[i] = i;
+			pokemonIDs[i] = i+151;
 		
 		// fills an array with all of the pokemon names
 		// pokemonNames[0] is unused in order to match a pokemon's ID number with its respective index
-		String[] pokemonNames = new String[] {"not a pokemon", "bulbasaur", "ivysaur", "venusaur", "charmander",
-				"charmeleon", "charizard", "squirtle", "wartortle", "blastoise", "caterpie", "metapod", "butterfree",
-				"weedle", "kakuna", "beedrill", "pidgey", "pidgeotto", "pidgeot", "rattata", "raticate", "spearow",
-				"fearow", "ekans", "arbok", "pikachu", "raichu", "sandshrew", "sandslash", "nidoran-f", "nidorina",
-				"nidoqueen", "nidoran-m", "nidorino", "nidoking", "clefairy", "clefable", "vulpix", "ninetales",
-				"jigglypuff", "wigglytuff", "zubat", "golbat", "oddish", "gloom", "vileplume", "paras", "parasect",
-				"venonat", "venomoth", "diglett", "dugtrio", "meowth", "persian", "psyduck", "golduck", "mankey",
-				"primeape", "growlithe", "arcanine", "poliwag", "poliwhirl", "poliwrath", "abra", "kadabra", "alakazam",
-				"machop", "machoke", "machamp", "bellsprout", "weepinbell", "victreebel", "tentacool", "tentacruel",
-				"geodude", "graverler", "golem", "ponyta", "rapidash", "slowpoke", "slowbro", "magnemite", "magneton",
-				"farfetchd", "doduo", "dodrio", "seel", "dewgong", "grimer", "muk", "shellder", "cloyster", "gastly",
-				"haunter", "gengar", "onix", "drowzee", "hypno", "krabby", "kingler", "voltorb", "electrode", "exeggcute",
-				"exeggutor", "cubone", "marowak", "hitmonlee", "hitmonchan", "lickitung", "koffing", "weezing", "rhyhorn",
-				"rhydon", "chansey", "tangela", "kangaskhan", "horsea", "seadra", "goldeen", "seaking", "staryu", "starmie",
-				"mr-mime", "scyther", "jynx", "electabuzz", "magmar", "pinsir", "tauros", "magikarp", "gyarados","lapras",
-				"ditto", "eevee", "vaporeon", "jolteon", "flareon", "porygon", "omanyte", "omastar", "kabuto", "kabutops", "aerodactyl",
-				"snorlax", "articuno", "zapdos", "moltres", "dratini", "dragonair", "dragonite", "mewtwo", "mew"};
+		String[] pokemonNames = new String[] {"not a pokemon", "chikorita", "bayleef", "meganium", "cyndaquil",
+				"quilava", "typhlosion", "totodile", "croconaw", "feraligatr", "sentret", "furret", "hoothoot", "noctowl",
+				"ledyba", "ledian", "spinarak", "ariados", "crobat", "chinchou", "lanturn", "pichu", "cleffa",
+				"igglybuff", "togepi", "togetic", "natu", "xatu", "mareep", "flaafy", "ampharos", "bellossom",
+				"marill", "azumarill", "sudowoodo", "politoed", "hoppip", "skiploom", "jumpluff", "aipom",
+				"sunkern", "sunflora", "yanma", "wooper", "quagsire", "espeon", "umbreon", "murkrow", "slowking",
+				"misdreavus", "unown", "wobbuffet", "girafarig", "pineco", "forretress", "dunsparce", "gligar", "steelix",
+				"snubbull", "granbull", "qwillfish", "scizor", "shuckle", "heracross", "sneasel", "teddiursa", "ursaring",
+				"slugma", "magcargo", "swinub", "piloswine", "corsola", "remoraid", "octillery", "delibird",
+				"mantine", "skarmory", "houndour", "houndoom", "kingdra", "phanphy", "donphan", "porygon2", "stantler",
+				"smeargle", "tyrogue", "hitmontop", "smoochum", "elekid", "magby", "miltank", "blissey", "raikou", "entei",
+				"suicune", "larvitar", "pupitar", "tyranitar", "lugia", "ho-oh", "celebi"};
 		
 		// calls the insertSprites() method for actual inserting
 		for (int i = 1; i < 152; i++)
