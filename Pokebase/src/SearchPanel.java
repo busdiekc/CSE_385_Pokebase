@@ -194,6 +194,7 @@ public class SearchPanel extends javax.swing.JPanel {
         this.jTable1.getTableHeader().getColumnModel().getColumn(5).setHeaderValue("Pokemon 4");
         this.jTable1.getTableHeader().getColumnModel().getColumn(6).setHeaderValue("Pokemon 5");
         this.jTable1.getTableHeader().getColumnModel().getColumn(7).setHeaderValue("Pokemon 6");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(8).setHeaderValue("");
         
         refreshTeamTable();
         
