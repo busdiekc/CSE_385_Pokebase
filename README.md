@@ -11,3 +11,5 @@ Introduction
 The goal of the Pokebase is to be a quick and easy to use pokedex application for a desktop or laptop computer. We hope
 that the Pokebase application can be used in conjunction with the core Pokemon games to provide a convenient way to reference
 a particular pokemon and its attributes.
+
+Pokebase also offers a simple teambuilder that allows a user to save multiple teams. Each team can contain a maximum of 6 pokemon.
