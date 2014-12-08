@@ -14,7 +14,7 @@ public class Main {
 	public static void main(String[] args) throws Exception	{
 		//ManipulateSprites ms = new ManipulateSprites();
 		//ms.insertAllSprites();
-		
+	
         WebLookAndFeel.install();
             
         StandardQueries std = new StandardQueries();
@@ -26,6 +26,7 @@ public class Main {
         frame.pack();
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
 	}	
 }
 

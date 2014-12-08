@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -91,6 +93,17 @@ public class SearchPanel extends javax.swing.JPanel {
     }
     
     void AddListeners() {
+    		jTextField1.addMouseListener(new MouseListener() {
+    			@Override
+    			public void mouseClicked(MouseEvent evt) {
+    				jTextField1.setText("");
+    			}
+    			public void mouseEntered(MouseEvent e) {}
+    			public void mouseExited(MouseEvent e) {}
+				public void mousePressed(MouseEvent arg0) {}
+				public void mouseReleased(MouseEvent e) {}
+    		});
+    	
             jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
