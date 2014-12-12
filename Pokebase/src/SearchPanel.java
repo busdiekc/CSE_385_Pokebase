@@ -58,29 +58,36 @@ public class SearchPanel extends javax.swing.JPanel {
     
     void setTableDefaults() {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
-             @Override
+
+			@Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,boolean hasFocus, int row, int column)
             {
                     JLabel label = new JLabel();
 
                     if (value!=null) {
                     label.setHorizontalAlignment(JLabel.CENTER);
-                    //value is parameter which filled by byteOfImage
+                    	//value is parameter which filled by byteOfImage
                         if(column == 2 && searchMode) {
                             label.setIcon((ImageIcon)value);
                         } else {
+                        	//color the background for the types
+                        	if(column == 3 || column == 4) {
+                        		label.setOpaque(true);
+                        		label.setBackground(getTypeColor(value.toString()));
+                        	}
+                        	//if nothing else, its just text
                             label.setText(value.toString());
                         }
                     }
-                    
-                    if(hasFocus || isSelected) {
+                    //selected rows are red
+                    /*if(hasFocus || isSelected) {
                     	label.setOpaque(true);
                     	label.setBackground(Color.red);
                     } else {
                     	label.setOpaque(false);
                     	label.setBackground(Color.white);
                     }
-                    
+                    */
                     return label;
             }
         };
@@ -238,13 +245,50 @@ public class SearchPanel extends javax.swing.JPanel {
     			}
     			
     			model.addRow(row);
-    		}
-    		
-    		
-    		
-    		
+    		}	
     	} catch (Exception e) {
     		e.printStackTrace();
+    	}
+    }
+    
+    private Color getTypeColor(String type) {
+    	switch(type) {
+    		case "Fighting":
+    			return new Color(204, 102, 0);
+    		case "Flying":
+    			return new Color(170, 255, 255);
+    		case "Poison":
+    			return new Color(190, 19, 150);
+    		case "Ground":
+    			return new Color(210, 141, 49);
+    		case "Rock":
+    			return new Color(178, 137, 84);
+    		case "Bug":
+    			return new Color(102, 204, 0);
+    		case "Ghost":
+    			return new Color(94, 74, 121);
+    		case "Steel":
+    			return new Color(134, 154, 152);
+    		case "Fire":
+    			return new Color(255, 120, 0);
+    		case "Water":
+    			return new Color(0, 160, 180);
+    		case "Grass":
+    			return new Color(40, 153, 35);
+    		case "Electric":
+    			return new Color(224, 224, 0);
+    		case "Psychic":
+    			return new Color(235, 0, 180);
+    		case "Ice":
+    			return new Color(92, 235, 235);
+    		case "Dragon":
+    			return new Color(70, 70, 173);
+    		case "Dark":
+    			return new Color(32, 32, 32);
+    		case "Fairy":
+    			return new Color(255, 60, 183);
+    		default:
+    			return new Color(204, 204, 204);
     	}
     }
 

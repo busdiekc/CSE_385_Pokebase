@@ -110,22 +110,12 @@ public class ManipulateSprites {
 		// fills the array with the correct pokemonID numbers
 		// there is not a pokemon with ID of 0 so it is unused
 		for (int i = 1; i < 152; i++)
-			pokemonIDs[i] = i+151;
+			pokemonIDs[i] = i+251;
 		
 		// fills an array with all of the pokemon names
 		// pokemonNames[0] is unused in order to match a pokemon's ID number with its respective index
-		String[] pokemonNames = new String[] {"not a pokemon", "chikorita", "bayleef", "meganium", "cyndaquil",
-				"quilava", "typhlosion", "totodile", "croconaw", "feraligatr", "sentret", "furret", "hoothoot", "noctowl",
-				"ledyba", "ledian", "spinarak", "ariados", "crobat", "chinchou", "lanturn", "pichu", "cleffa",
-				"igglybuff", "togepi", "togetic", "natu", "xatu", "mareep", "flaaffy", "ampharos", "bellossom",
-				"marill", "azumarill", "sudowoodo", "politoed", "hoppip", "skiploom", "jumpluff", "aipom",
-				"sunkern", "sunflora", "yanma", "wooper", "quagsire", "espeon", "umbreon", "murkrow", "slowking",
-				"misdreavus", "unown", "wobbuffet", "girafarig", "pineco", "forretress", "dunsparce", "gligar", "steelix",
-				"snubbull", "granbull", "qwilfish", "scizor", "shuckle", "heracross", "sneasel", "teddiursa", "ursaring",
-				"slugma", "magcargo", "swinub", "piloswine", "corsola", "remoraid", "octillery", "delibird",
-				"mantine", "skarmory", "houndour", "houndoom", "kingdra", "phanphy", "donphan", "porygon2", "stantler",
-				"smeargle", "tyrogue", "hitmontop", "smoochum", "elekid", "magby", "miltank", "blissey", "raikou", "entei",
-				"suicune", "larvitar", "pupitar", "tyranitar", "lugia", "ho-oh", "celebi"};
+		String[] pokemonNames = new String[] {"not a pokemon", "treeko", "grovyle", "sceptile", "torchic",
+				"combusken", "blaziken", "mudkip", "marshtomp", "swampert"};
 		
 		// calls the insertSprites() method for actual inserting
 		for (int i = 1; i < 152; i++)
