@@ -108,7 +108,7 @@ public class PokemonDetail extends javax.swing.JDialog {
     void populateEvoPanel() {
         try {
             Statement evo = std.conn.createStatement();
-            ResultSet evolves = evo.executeQuery("Select name, picture, method " 
+            ResultSet evolves = evo.executeQuery("Select Pokemon.name, picture, method " 
                     +"FROM Pokemon, Evolutions, Sprites " 
                     +"WHERE EvolvedID = ID AND ID = PokemonID AND BabyID = "+pokemonID);
             

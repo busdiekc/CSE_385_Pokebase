@@ -20,6 +20,14 @@ public class StandardQueries {
         Class.forName(sDriverName);
         String sDbUrl = "jdbc:sqlite:Pokebase.db";
         conn = DriverManager.getConnection(sDbUrl);
+        
+        
+        //Statement s = conn.createStatement();
+        //ResultSet r;
+        //for(int i=1; i < 331; i++){
+        // 	r = s.executeQuery("select name from pokemon where id = "+i);
+        //	s.execute("update swap set name = '"+r.getString("Name").replace("'", "''")+"' where pokemonid = "+i);
+        //}
     }
     
     /* example of a query on the database
@@ -39,7 +47,7 @@ public class StandardQueries {
     				+ "NATURAL JOIN (SELECT Name AS Hab, HabitatID FROM Habitats) "
     				+ "LEFT OUTER JOIN (SELECT id as tempid, evolvesfrom from pokemon "
     				+ "LEFT OUTER JOIN (SELECT evolvedid, name as evolvesfrom from pokemon, evolutions WHERE pokemon.id = babyid) on id = evolvedid) on id = tempid "
-                    + "JOIN (SELECT PokemonID, Picture FROM Sprites) ON PokemonID = Pokemon.ID ";
+                    + "JOIN (SELECT PokemonID, Picture FROM Sprites) ON PokemonID = Pokemon.ID AND Name = Pokemon.Name ";
                 
     		return search.executeQuery(query);
     		

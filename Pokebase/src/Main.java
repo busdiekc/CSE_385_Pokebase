@@ -16,9 +16,9 @@ public class Main {
 		//ms.insertAllSprites();
 	
         WebLookAndFeel.install();
-            
-        StandardQueries std = new StandardQueries();
-       
+     
+        StandardQueries std = new StandardQueries(); 
+        
         SearchPanel pane = new SearchPanel(std);
         
         JFrame frame = new JFrame();

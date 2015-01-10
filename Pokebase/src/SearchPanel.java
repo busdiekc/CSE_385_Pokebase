@@ -62,36 +62,36 @@ public class SearchPanel extends javax.swing.JPanel {
 			@Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,boolean hasFocus, int row, int column)
             {
-                    JLabel label = new JLabel();
-
+                    //DefaultTableCellRenderer label = (DefaultTableCellRenderer)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				    JLabel label = new JLabel() ;
+				
                     if (value!=null) {
                     label.setHorizontalAlignment(JLabel.CENTER);
                     	//value is parameter which filled by byteOfImage
                         if(column == 2 && searchMode) {
                             label.setIcon((ImageIcon)value);
-                        } else {
+                        } else if(column == 3 || column == 4) {
                         	//color the background for the types
-                        	if(column == 3 || column == 4) {
-                        		label.setOpaque(true);
-                        		label.setBackground(getTypeColor(value.toString()));
-                        	}
+                    		label.setOpaque(true);
+                    		label = getTypeColor(label, value.toString());
+                    		if(value.toString().equals("Dark") || value.toString().equals("Ghost")) {
+                    			label.setForeground(Color.WHITE);
+                    		}
+                        } else {
                         	//if nothing else, its just text
                             label.setText(value.toString());
                         }
                     }
+                    
                     //selected rows are red
-                    /*if(hasFocus || isSelected) {
+                    if(isSelected && column != 3 && column != 4) {
                     	label.setOpaque(true);
                     	label.setBackground(Color.red);
-                    } else {
-                    	label.setOpaque(false);
-                    	label.setBackground(Color.white);
                     }
-                    */
+                    
                     return label;
             }
         };
-        jTable1.setSelectionBackground(Color.red);
         
         for(int i=0; i<jTable1.getColumnCount(); i++){
          jTable1.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
@@ -172,8 +172,8 @@ public class SearchPanel extends javax.swing.JPanel {
         this.jTable1.getTableHeader().getColumnModel().getColumn(2).setHeaderValue("Sprite");
         this.jTable1.getTableHeader().getColumnModel().getColumn(3).setHeaderValue("Type 1");
         this.jTable1.getTableHeader().getColumnModel().getColumn(4).setHeaderValue("Type 2");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(5).setHeaderValue("Height (inches)");
-        this.jTable1.getTableHeader().getColumnModel().getColumn(6).setHeaderValue("Weight (pounds)");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(5).setHeaderValue("Height (in)");
+        this.jTable1.getTableHeader().getColumnModel().getColumn(6).setHeaderValue("Weight (lb)");
         this.jTable1.getTableHeader().getColumnModel().getColumn(7).setHeaderValue("Habitat");
         this.jTable1.getTableHeader().getColumnModel().getColumn(8).setHeaderValue("Evolves From");
         
@@ -251,45 +251,85 @@ public class SearchPanel extends javax.swing.JPanel {
     	}
     }
     
-    private Color getTypeColor(String type) {
+    private JLabel getTypeColor(JLabel label, String type) {
     	switch(type) {
     		case "Fighting":
-    			return new Color(204, 102, 0);
+    			label.setBackground(new Color(204, 102, 0));
+    			label.setText(type);
+    			break;
     		case "Flying":
-    			return new Color(170, 255, 255);
+    			label.setBackground(new Color(170, 255, 255));
+    			label.setText(type);
+    			break;
     		case "Poison":
-    			return new Color(190, 19, 150);
+    			label.setBackground(new Color(190, 19, 150));
+    			label.setText(type);
+    			break;
     		case "Ground":
-    			return new Color(210, 141, 49);
+    			label.setBackground(new Color(210, 141, 49));
+    			label.setText(type);
+    			break;
     		case "Rock":
-    			return new Color(178, 137, 84);
+    			label.setBackground(new Color(178, 137, 84));
+    			label.setText(type);
+    			break;
     		case "Bug":
-    			return new Color(102, 204, 0);
+    			label.setBackground(new Color(102, 204, 0));
+    			label.setText(type);
+    			break;
     		case "Ghost":
-    			return new Color(94, 74, 121);
+    			label.setBackground(new Color(94, 74, 121));
+    			label.setText(type);
+    			break;
     		case "Steel":
-    			return new Color(134, 154, 152);
+    			label.setBackground(new Color(134, 154, 152));
+    			label.setText(type);
+    			break;
     		case "Fire":
-    			return new Color(255, 120, 0);
+    			label.setBackground(new Color(255, 69, 0));
+    			label.setText(type);
+    			break;
     		case "Water":
-    			return new Color(0, 160, 180);
+    			label.setBackground(new Color(0, 206, 209));
+    			label.setText(type);
+    			break;
     		case "Grass":
-    			return new Color(40, 153, 35);
+    			label.setBackground(new Color(40, 153, 35));
+    			label.setText(type);
+    			break;
     		case "Electric":
-    			return new Color(224, 224, 0);
+    			label.setBackground(new Color(224, 224, 0));
+    			label.setText(type);
+    			break;
     		case "Psychic":
-    			return new Color(235, 0, 180);
+    			label.setBackground(new Color(235, 0, 180));
+    			label.setText(type);
+    			break;
     		case "Ice":
-    			return new Color(92, 235, 235);
+    			label.setBackground(new Color(92, 235, 235));
+    			label.setText(type);
+    			break;
     		case "Dragon":
-    			return new Color(70, 70, 173);
+    			label.setBackground(new Color(70, 70, 173));
+    			label.setText(type);
+    			break;
     		case "Dark":
-    			return new Color(32, 32, 32);
+    			label.setBackground(new Color(32, 32, 32));
+    			label.setText(type);
+    			break;
     		case "Fairy":
-    			return new Color(255, 60, 183);
+    			label.setBackground(new Color(255, 60, 183));
+    			label.setText(type);
+    			break;
+    		case "Normal":
+    			label.setBackground(new Color(204, 204, 204));
+    			label.setText(type);
+    			break;
     		default:
-    			return new Color(204, 204, 204);
+    			label.setBackground(new Color(255, 255, 255));
+    			label.setText(type);
     	}
+    	return label;
     }
 
     /**
@@ -382,6 +422,7 @@ public class SearchPanel extends javax.swing.JPanel {
             }
         });
         jTable1.setRowHeight(75);
+        jTable1.getColumnModel().setColumnMargin(0);
         jTable1.setSelectionBackground(new java.awt.Color(255, 51, 51));
         jTable1.setShowVerticalLines(false);
         jTable1.setSurrendersFocusOnKeystroke(true);
