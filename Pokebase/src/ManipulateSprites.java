@@ -41,7 +41,7 @@ public class ManipulateSprites {
 	}
 	
 	// used to insert the sprite and shiny sprite of a single pokemon
-	private void insertSprites(int pokemonID, String pokemonName) throws FileNotFoundException, SQLException {
+	public void insertSprites(int pokemonID, String pokemonName) throws FileNotFoundException, SQLException {
 		
 		File pic = new File("C:/PokemonSprites/" + pokemonName + ".png");
 		File shinyPic = new File("C:/PokemonSprites/" + pokemonName + "2.png");
@@ -49,22 +49,26 @@ public class ManipulateSprites {
 		InputStream picStream = new FileInputStream(pic);
 		InputStream shinyPicStream = new FileInputStream(shinyPic);
 		
-		ps = c.prepareStatement("insert into sprites (PokemonID, Picture, ShinyPicture) " + "values (?, ?, ?)");
+		ps = c.prepareStatement("insert into sprites (PokemonID, Name, Picture, ShinyPicture) values (?, ?, ?, ?)");
 		
 		ps.setInt(1, pokemonID);
-		ps.setBinaryStream(2, picStream, (int) pic.length());
-		ps.setBinaryStream(3, shinyPicStream, (int) shinyPic.length());
+			pokemonName = pokemonName.substring(0, 1).toUpperCase() + pokemonName.substring(1);
+		ps.setString(2, pokemonName);
+		ps.setBinaryStream(3, picStream, (int) pic.length());
+		ps.setBinaryStream(4, shinyPicStream, (int) shinyPic.length());
 		
 		ps.executeUpdate();
 		
 	}
 	
 	// used to retrieve just the sprite of a single pokemon
-	public byte[] retrieveASprite(int pokemonID) throws SQLException {
+	public byte[] retrieveASprite(int pokemonID, String pokemonName) throws SQLException {
 		
 		byte[] sprite = null;
 		
-		ps = c.prepareStatement("select picture from sprites where pokemonid = " + pokemonID);
+		ps = c.prepareStatement("select picture from sprites where pokemonID = ? AND Name = ?");
+		ps.setInt(1, pokemonID);
+		ps.setString(2, pokemonName);
 		rs = ps.executeQuery();
 		
 		while (rs.next())
@@ -74,11 +78,13 @@ public class ManipulateSprites {
 	}
 	
 	// used to retrieve just the shiny sprite of a single pokemon
-	public byte[] retrieveAShinySprite(int pokemonID) throws SQLException {
+	public byte[] retrieveAShinySprite(int pokemonID, String pokemonName) throws SQLException {
 		
 		byte[] shinySprite = null;
 		
-		ps = c.prepareStatement("select shinypicture from sprites where pokemonid = " + pokemonID);
+		ps = c.prepareStatement("select shinypicture from sprites where pokemonid = ? AND Name = ?");
+		ps.setInt(1, pokemonID);
+		ps.setString(2, pokemonName);
 		rs = ps.executeQuery();
 		
 		while(rs.next())
@@ -115,10 +121,26 @@ public class ManipulateSprites {
 		// fills an array with all of the pokemon names
 		// pokemonNames[0] is unused in order to match a pokemon's ID number with its respective index
 		String[] pokemonNames = new String[] {"not a pokemon", "treeko", "grovyle", "sceptile", "torchic",
-				"combusken", "blaziken", "mudkip", "marshtomp", "swampert"};
-		
+				"combusken", "blaziken", "mudkip", "marshtomp", "swampert", "poochyena", "mightyena", 
+				"zigzagoon", "linoone", "wurmple", "silcoon", "beautifly", "cascoon", "dustox", "lotad", 
+				"lombre", "ludicolo", "seedot", "nuzleaf", "shiftry", "taillow", "swellow", "wingull", 
+				"pelipper", "ralts", "kirlia", "gardevoir", "surskit", "masquerain", "shroomish", "breloom",
+				"slakoth", "vigoroth", "slaking", "nincada", "ninjask", "shedinja", "whismur", "loudred",
+				"exploud", "makuhita", "hariyama", "azurill", "nosepass", "skitty", "delcatty", "sableye",
+				"mawile", "aron", "lairon", "aggron", "meditite", "medicham", "electrike", "manectric", 
+				"plusle", "minun", "volbeat", "illumise", "roselia", "gulpin", "swalot", "carvanha", "sharpedo",
+				"wailmer", "wailord", "numel", "camerupt", "torkoal", "spoink", "grumpig", "spinda",
+				"trapinch", "vibrava", "flygon", "cacnea", "cacturne", "swablu", "altaria", "zangoose", "seviper",
+				"lunatone", "solrock", "barboach", "whiscash", "corphish", "crawdaunt", "baltoy", "claydol",
+				"lileep", "cradily", "anorith", "armaldo", "feebas", "milotic", "normal Castform", "kecleon",
+				"shuppet", "banette", "duskull", "dusclops", "tropius", "chimecho", "absol", "wynaut", "snorunt",
+				"glalie", "spheal", "sealeo", "walrein", "clamperl", "huntail", "gorebyss", "relicanth",
+				"luvdisc", "bagon", "shelgon", "salamence", "beldum", "metang", "metagross", "regirock", 
+				"regice", "registeel", "latias", "latios", "kyogre", "groudon", "rayquaza", "jirachi", 
+				"normal Forme Deoxys"};
+
 		// calls the insertSprites() method for actual inserting
-		for (int i = 1; i < 152; i++)
+		for (int i = 1; i + 251 < 387; i++)
 			insertSprites(pokemonIDs[i], pokemonNames[i]);
 		
 	}

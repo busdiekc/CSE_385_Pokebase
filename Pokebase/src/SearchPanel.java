@@ -59,10 +59,11 @@ public class SearchPanel extends javax.swing.JPanel {
     void setTableDefaults() {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer() {
 
+        	//DefaultTableCellRenderer DEFAULT = new DefaultTableCellRenderer();
 			@Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,boolean hasFocus, int row, int column)
             {
-                    //DefaultTableCellRenderer label = (DefaultTableCellRenderer)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    //JLabel label = (JLabel)DEFAULT.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				    JLabel label = new JLabel() ;
 				
                     if (value!=null) {
@@ -84,7 +85,7 @@ public class SearchPanel extends javax.swing.JPanel {
                     }
                     
                     //selected rows are red
-                    if(isSelected && column != 3 && column != 4) {
+                    if(isSelected && column != 3 && (column != 4 || value == null)) {
                     	label.setOpaque(true);
                     	label.setBackground(Color.red);
                     }
@@ -93,10 +94,7 @@ public class SearchPanel extends javax.swing.JPanel {
             }
         };
         
-        for(int i=0; i<jTable1.getColumnCount(); i++){
-         jTable1.getColumnModel().getColumn(i).setCellRenderer( centerRenderer );
-        }
-        
+        jTable1.setDefaultRenderer(Object.class, centerRenderer);
     }
     
     void AddListeners() {
@@ -118,7 +116,7 @@ public class SearchPanel extends javax.swing.JPanel {
                         int row = jTable1.rowAtPoint(evt.getPoint());
                         int col = jTable1.columnAtPoint(evt.getPoint());
                         if (row >= 0 && col >= 0) {
-                            new PokemonDetail(null, std, (int)jTable1.getModel().getValueAt(row, 0));
+                            new PokemonDetail(null, std, (int)jTable1.getModel().getValueAt(row, 0), (String)jTable1.getModel().getValueAt(row, 1));
                         }
                     }
                 }
@@ -190,7 +188,7 @@ public class SearchPanel extends javax.swing.JPanel {
         
             while(getAllPokemon.next()) {
                 model.addRow(new Object[]{getAllPokemon.getInt("ID"), 
-                    getAllPokemon.getObject("Name"),
+                    getAllPokemon.getObject("PokemonName"),
                     new ImageIcon((byte[])getAllPokemon.getObject("Picture")),
                     getAllPokemon.getObject("Type1Name"),
                     getAllPokemon.getObject("Type2Name"),
@@ -200,7 +198,7 @@ public class SearchPanel extends javax.swing.JPanel {
                     getAllPokemon.getObject("EvolvesFrom")});
             }
         } catch(Exception ex) {
-            System.err.printf(ex.getMessage());
+            ex.printStackTrace();
           }
     }
     
@@ -539,7 +537,7 @@ public class SearchPanel extends javax.swing.JPanel {
                 model.setRowCount(0);
                 while(tableResults.next()) {
                     model.addRow(new Object[]{tableResults.getInt("ID"), 
-                    tableResults.getObject("Name"), 
+                    tableResults.getObject("pokemonName"), 
                     new ImageIcon((byte[])tableResults.getObject("Picture")),
                     tableResults.getObject("Type1Name"),
                     tableResults.getObject("Type2Name"),
@@ -551,7 +549,7 @@ public class SearchPanel extends javax.swing.JPanel {
                 }
                 repaint();
             } catch (Exception ex){
-                System.out.println(ex.getMessage());
+                ex.printStackTrace();
             }
             
         } else {

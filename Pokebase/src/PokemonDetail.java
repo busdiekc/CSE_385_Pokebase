@@ -1,4 +1,5 @@
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,14 +22,16 @@ import javax.swing.table.DefaultTableModel;
 public class PokemonDetail extends javax.swing.JDialog {
     StandardQueries std;
     int pokemonID = 0;
+    String pokemonName;
     /**
      * Creates new form PokemonDetail
      */
-    public PokemonDetail(java.awt.Frame parent, StandardQueries std, int pokemonID) {
+    public PokemonDetail(java.awt.Frame parent, StandardQueries std, int pokemonID, String pokemonName) {
         super(parent, true);
         initComponents();
         this.std = std;
         this.pokemonID = pokemonID;
+        this.pokemonName = pokemonName;
         
         setTableDefaults();
         populateHeader();
@@ -42,8 +45,10 @@ public class PokemonDetail extends javax.swing.JDialog {
     void populateHeader() {
         //try to fill in name on detail
         try {
-        Statement header = std.conn.createStatement();
-        ResultSet rs = header.executeQuery("SELECT name FROM Pokemon WHERE ID = "+pokemonID);
+        PreparedStatement header = std.conn.prepareStatement("SELECT name FROM Pokemon WHERE ID = ? AND Name = ?");
+        header.setInt(1, pokemonID);
+        header.setString(2, pokemonName);
+        ResultSet rs = header.executeQuery();
         
         rs.next();
         
@@ -55,8 +60,8 @@ public class PokemonDetail extends javax.swing.JDialog {
         //try to pull sprites for pokemon
         try {
             ManipulateSprites ms = new ManipulateSprites();
-            jLabel1.setIcon(new ImageIcon(ms.generateImage(ms.retrieveASprite(pokemonID))));
-            jLabel2.setIcon(new ImageIcon(ms.generateImage(ms.retrieveAShinySprite(pokemonID))));
+            jLabel1.setIcon(new ImageIcon(ms.generateImage(ms.retrieveASprite(pokemonID, pokemonName))));
+            jLabel2.setIcon(new ImageIcon(ms.generateImage(ms.retrieveAShinySprite(pokemonID, pokemonName))));
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -87,8 +92,11 @@ public class PokemonDetail extends javax.swing.JDialog {
     
     void populateTable() {
         try {
-            Statement pokemon = std.conn.createStatement();
-            ResultSet pokemonInfo = pokemon.executeQuery("SELECT * FROM STATS WHERE pokemonID = "+pokemonID);
+            PreparedStatement pokemon = std.conn.prepareStatement("SELECT * FROM STATS WHERE pokemonID = ? AND Name = ?");
+            pokemon.setInt(1, pokemonID);
+            pokemon.setString(2, pokemonName);
+            ResultSet pokemonInfo = pokemon.executeQuery();
+            
             pokemonInfo.next();
             
             DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
@@ -101,7 +109,7 @@ public class PokemonDetail extends javax.swing.JDialog {
             
             
         } catch (Exception ex) {
-            System.err.print(ex.getMessage());
+        	ex.printStackTrace();
         }
     }
     
@@ -122,7 +130,7 @@ public class PokemonDetail extends javax.swing.JDialog {
             	jTextPane1.setText(evolutions);
             }
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
