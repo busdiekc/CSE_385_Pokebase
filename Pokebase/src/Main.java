@@ -12,8 +12,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class Main {
 	public static void main(String[] args) throws Exception	{
-		//ManipulateSprites ms = new ManipulateSprites();
-		//ms.insertAllSprites();
+        //ManipulateSprites ms = new ManipulateSprites();
+	//ms.insertAllSprites();
 	
         WebLookAndFeel.install();
      

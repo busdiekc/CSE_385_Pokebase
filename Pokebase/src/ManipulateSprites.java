@@ -116,11 +116,14 @@ public class ManipulateSprites {
 		// fills the array with the correct pokemonID numbers
 		// there is not a pokemon with ID of 0 so it is unused
 		for (int i = 1; i < 152; i++)
-			pokemonIDs[i] = i+251;
+			pokemonIDs[i] = i+386;
 		
 		// fills an array with all of the pokemon names
 		// pokemonNames[0] is unused in order to match a pokemon's ID number with its respective index
-		String[] pokemonNames = new String[] {"not a pokemon", "treeko", "grovyle", "sceptile", "torchic",
+		String[] pokemonNames = new String[] {"not a pokemon", "turtwig", "grotle", "torterra", "chimchar",
+				"monferno", "infernape", "piplup", "prinplup", "empoleon"
+		};
+				/*"not a pokemon", "treeko", "grovyle", "sceptile", "torchic",
 				"combusken", "blaziken", "mudkip", "marshtomp", "swampert", "poochyena", "mightyena", 
 				"zigzagoon", "linoone", "wurmple", "silcoon", "beautifly", "cascoon", "dustox", "lotad", 
 				"lombre", "ludicolo", "seedot", "nuzleaf", "shiftry", "taillow", "swellow", "wingull", 
@@ -138,6 +141,7 @@ public class ManipulateSprites {
 				"luvdisc", "bagon", "shelgon", "salamence", "beldum", "metang", "metagross", "regirock", 
 				"regice", "registeel", "latias", "latios", "kyogre", "groudon", "rayquaza", "jirachi", 
 				"normal Forme Deoxys"};
+				*/
 
 		// calls the insertSprites() method for actual inserting
 		for (int i = 1; i + 251 < 387; i++)
