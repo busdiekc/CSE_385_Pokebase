@@ -40,6 +40,16 @@ public class ManipulateSprites {
 		}
 	}
 	
+	public ManipulateSprites(String databaseName) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:" + databaseName);
+		} catch (ClassNotFoundException ce) {
+			ce.printStackTrace();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
+	}
 	// used to insert the sprite and shiny sprite of a single pokemon
 	public void insertSprites(int pokemonID, String pokemonName) throws FileNotFoundException, SQLException {
 		
