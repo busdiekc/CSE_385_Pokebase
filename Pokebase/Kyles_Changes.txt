@@ -1,0 +1,46 @@
+Last Edit: 03/21/2015 by Kyle B
+
+I will attempt to explain all of the changes that I have made to Pokebase. It has
+been a few months so I might forget a thing here or there. If you have questions, ask 
+me and I'll do my best to answer.
+
+New_Pokebase.db
+-----------------------------------------
+So in order to handle the new mega pokemon and pokemon with various forms I had to rebuild our database with
+a different schema. I've added an autoID attribute that auto-increments as you add tuples to the Pokemon, Sprite,
+and Stat tables. Admittedly, having a separate autoID for each table isn't a good idea but that's what I did
+3 months ago. It works because the information is entered into the database file from an array of Pokemon
+objects which are always pulled from the website pokemondb.net in the correct order. 
+
+As on now New_Pokebase.db is missing a good portion of information. It does not include any sprites or evolutions, 
+and it does not have the pokemon linked to their respective habitat (habitatID is defaulted to -1 currently). These 
+will be updated when I figure out how to pull all the sprites and evolutions from the internet so we aren't forced 
+to manually enter in data for 700+ pokemon entries. 
+
+Pokemon.java
+------------------------------------------
+This is just a simple class used for representing a pokemon and storing its respective data. All the information 
+pulled from pokemondb.net get stored in a new pokemon object and is then stored in an array of all the pokemon.
+
+WebsiteParser.java
+------------------------------------------
+This is the class that handles pulling information from the different webpages located at pokemondb.net. 
+The tricky part was correctly putting the information parsed from the website into the right variables for storage 
+because the different naming styles (mega, attack form, etc.) made it hell to easily know what data was where. For 
+example, parsing Pikachu would yield an array with name, types, stats but parsing a mega pokemon would yield an 
+array with name, mega, types, stats. I also discovered that not all of the mega evolutions are in the master pokedex 
+list on pokemondb.net, some you have to click the specific pokemon to see their mega evolution (e.g. Swampert). With 
+this in mind I do not guaruntee that I have correctly parsed the mega pokemon. I think I did a good job, but I can't 
+be sure.
+
+Running just this file currently prints out the ID, name, height, weight, type1, type2, and non-updated habitatID for 
+every pokemon in the pokemonArray, which is all of them unless any mega evolutions have been skipped due to the problem 
+stated above.
+
+PutStuffInTheDatabase.java
+-------------------------------------------
+This class is responsible for taking the data stored in each pokemon in the pokemonArray and putting it in the database. 
+There are currently methods for the pokemon table, the stats table, and the sprites table. 
+
+Running just this file will parse the information by using WebsiteParser.java and then insert all the information 
+obtained into the database.
