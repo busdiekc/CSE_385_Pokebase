@@ -3,14 +3,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 // Author: Kyle Busdieker
@@ -22,10 +20,11 @@ public class WebsiteParser {
 	String urlStats;
 	String urlWeightsHeights;
 	String urlHabitats;
+	String urlEvolutions;
 	static Document htmlStatsFile;
 	static Document htmlWeightsHeightsFile;
 	static Document htmlHabitatFile;
-
+	static Document htmlEvolutionsFile;
 	static ArrayList<Pokemon> pokemonArray;
 
 
@@ -39,6 +38,9 @@ public class WebsiteParser {
 
 		urlHabitats = "http://bulbapedia.bulbagarden.net/wiki/List_of_Pokémon_by_habitat";
 		htmlHabitatFile = Jsoup.connect(urlHabitats).get();
+		
+		urlEvolutions = "http://pokemondb.net/evolution";
+		htmlEvolutionsFile = Jsoup.connect(urlEvolutions).get();
 
 		pokemonArray = new ArrayList<Pokemon>();
 
@@ -787,13 +789,93 @@ public class WebsiteParser {
 		}
 
 	}
+	
+	public static void evolutionsParser(Document evolutionsFile) {
+		String s = new String();
+		Elements table = htmlEvolutionsFile.getElementsByClass("infocard-evo-list");
+		s = table.text();
+		String[] splitTemp = s.split(" ");
+		ArrayList<String> textSplit = new ArrayList<String>();
+		for (String st : splitTemp)
+			textSplit.add(st);
+		
+		for (int i = 0; i < textSplit.size(); i++) {
+			if (textSplit.get(i).contains("·"))
+				textSplit.remove(i);
+		}
+		
+		for (int i = 0; i < textSplit.size(); i++) {
+			if (textSplit.get(i).contains("(") && !textSplit.get(i).contains(")")){
+				if (textSplit.get(i+1).contains(")")) {
+					String temp = textSplit.get(i);
+					String temp2 = textSplit.get(i+1);
+					textSplit.remove(i);
+					textSplit.add(i, temp + " " + temp2);
+					textSplit.remove(i+1);
+				}
+				else {
+					int counter = 1;
+					while (!textSplit.get(i + counter).contains(")")) {
+						counter++;
+					}
+					for (int j = 1; j <= counter; j++){
+						String temp = textSplit.get(i);
+						String temp2 = textSplit.get(i+ 1);
+						textSplit.remove(i);
+						textSplit.add(i, temp + " " + temp2);
+						textSplit.remove(i + 1);
+					}
+				}
+			}
+		}
+		HashSet<String> types = new HashSet<String>();
+		types.add("Normal");
+		types.add("Fire");
+		types.add("Water");
+		types.add("Electric");
+		types.add("Grass");
+		types.add("Ice");
+		types.add("Fighting");
+		types.add("Poison");
+		types.add("Ground");
+		types.add("Flying");
+		types.add("Psychic");
+		types.add("Bug");
+		types.add("Rock");
+		types.add("Ghost");
+		types.add("Dragon");
+		types.add("Dark");
+		types.add("Steel");
+		types.add("Fairy");
+		
+		// has to run through the array twice because the first pass doesn't catch pokemon with two types
+		for (int i = 0; i < textSplit.size(); i++) {
+			if (types.contains(textSplit.get(i))) {
+				textSplit.remove(i);
+			}
+		}
+		for (int i = 0; i < textSplit.size(); i++) {
+			if (types.contains(textSplit.get(i))) {
+				textSplit.remove(i);
+			}
+		}
+		
+		
+		for (int i = 0; i < textSplit.size(); i++)
+			System.out.println(textSplit.get(i));
+		
+	}
 
 	public static void main(String[] args) throws IOException, NumberFormatException, SQLException {
 
 		// creates the url files to pull data from and the array of pokemon
 		WebsiteParser wp = new WebsiteParser();
 		
-		// pulls number, name, type1name, type2name, and stats of pokemon
+		
+		evolutionsParser(wp.htmlEvolutionsFile);
+		
+		
+		/*// pulls number, name, type1name, type2name, and stats of pokemon
 		urlStatsParser(wp.htmlStatsFile);
 		
 		// converts type1name and type2name into id for the database
@@ -811,7 +893,7 @@ public class WebsiteParser {
 		for (Pokemon p : pokemonArray) {
 			System.out.println(p.pokemonNum + " " + p.pokemonName + " " + p.height + " " + p.weight + " " + p.type1ID + " " + p.type2ID + " " + p.habitatID);
 			//System.out.println(p.pokemonNum + " " + p.pokemonName + " " + p.type1Name + " " + p.type2Name + " " + p.totalPts);
-		}
+		}*/
 
 
 	}
