@@ -12,11 +12,11 @@ import java.util.HashSet;
 
 
 // Author: Kyle Busdieker
-// Date: 12/13/14
+// Last Edit: 03/22/2015
+// Date Created: 12/13/14
 // Purpose: Parse information about all the pokemon from www.pokebasedb.net
 
 public class WebsiteParser {
-
 	String urlStats;
 	String urlWeightsHeights;
 	String urlHabitats;
@@ -27,71 +27,34 @@ public class WebsiteParser {
 	static Document htmlEvolutionsFile;
 	static ArrayList<Pokemon> pokemonArray;
 
-
+	// Constructor establishes connections to the webpages that data will be pulled from
 	public WebsiteParser() throws IOException{
-
 		urlStats = "http://pokemondb.net/pokedex/all";
 		htmlStatsFile = Jsoup.connect(urlStats).get();
-
 		urlWeightsHeights = "http://pokemondb.net/pokedex/stats/height-weight";
 		htmlWeightsHeightsFile = Jsoup.connect(urlWeightsHeights).get();
-
 		urlHabitats = "http://bulbapedia.bulbagarden.net/wiki/List_of_Pokémon_by_habitat";
 		htmlHabitatFile = Jsoup.connect(urlHabitats).get();
-		
 		urlEvolutions = "http://pokemondb.net/evolution";
 		htmlEvolutionsFile = Jsoup.connect(urlEvolutions).get();
-
 		pokemonArray = new ArrayList<Pokemon>();
-
 	}
-
-
-	private static void HeightWeightParser() throws IOException {
-
-
-		WebsiteParser wp = new WebsiteParser();
-
-		Elements table = htmlWeightsHeightsFile.select("table");
-
-		for (Element row : table.select("tr")) {
-
-			Elements tds = row.select("td");
-
-			if (!tds.isEmpty()) {
-				System.out.println(tds.text());
-			}
-		}
-
-	}
-	
+	// retrieve the typeID from the database table Types to put in each pokemon's typeID variable
 	static void getTypeIDS(ArrayList<Pokemon> pokemon) throws SQLException {
-		
 		ManipulateSprites ms = new ManipulateSprites("New_Pokebase.db");
-		
 		for (Pokemon p : pokemon) {
-			
 			Statement getType1ID = ms.c.createStatement();
 			String query = "select typeid from types where typename = '" + p.type1Name + "'";
-			
 			ResultSet rs = getType1ID.executeQuery(query);
-			
 			p.type1ID = rs.getInt(1);
-			
 			if (!p.type2Name.contains("none")) {
-				
 				Statement getType2ID = ms.c.createStatement();
 				String q = "select typeid from types where typename = '" + p.type2Name + "'";
-				
 				rs = getType2ID.executeQuery(q);
-				
 				p.type2ID = rs.getInt(1);
 			}
-			
 		}
-		
 		ms.c.close();
-		
 	}
 
 	static void urlStatsParser(Document statsFile) throws IOException {
@@ -694,102 +657,64 @@ public class WebsiteParser {
 		}
 
 	}
-	
+	// converts the a pokemon's height given in meters to inches
 	static void convertHeights(ArrayList<Pokemon> pokemon) {
-		
 		for (Pokemon p : pokemon) {
-			
 			p.height = p.height * 39.3701;
 			p.height = Math.round(p.height * 100.0) / 100.0;
 		}
 	}
-	
-
+	// takes the heights from the website and puts them in the pokemon objects
 	static void getHeight(Document heightsWeightsFile) {
-		
 		Double[] heights = new Double[800];
 		int counter = 0;
-		
-		
 		Elements table = heightsWeightsFile.select("table");
-		
 		for (Element row : table.select("tr")) {
-			
 			Elements tds = row.select("td");
-			
 			if (!tds.isEmpty()) {
-				
 				String[] split = tds.text().split(" ");
-				
 				int i = 0;
-				
 				while (!split[i].contains("(")) {
 					i++;
 				}
-				
 				split[i] = split[i].replace("m", "");
 				split[i] = split[i].substring(1);
 				split[i] = split[i].substring(0, split[i].length()-1);
-				
 				heights[counter] = Double.parseDouble(split[i]);
-				
 			}
-			
 			counter++;
 		}
-		
 		int index = 1;
-		
 		for (Pokemon p : pokemonArray) {
-			
 			p.height = heights[index];
-			
 			index++;
 		}
-		
-		
-
 	}
-
+	// takes the weights from the website and puts them in the pokemon objects
 	static void getWeight(Document heightsWeightsFile) {
-
 		Double[] weights = new Double[800];
 		int counter = 0;
-		
 		Elements table = heightsWeightsFile.select("table");
-		
 		for (Element row : table.select("tr")) {
-			
 			Elements tds = row.select("td");
-			
 			if (!tds.isEmpty()) {
-				
 				String[] split = tds.text().split(" ");
-				
 				int i = 0;
-				
 				while(!split[i].contains("(")) {
 					i++;
 				}
-				
 				weights[counter] = Double.parseDouble(split[i+1]);
-				
 			}
-			
 			counter++;
-			
 		}
-		
 		int index = 1;
-		
 		for (Pokemon p : pokemonArray) {
-			
 			p.weight = weights[index];
 			index++;
 		}
-
 	}
-	
+	// work in progress
+	// takes the evolution chains from the website and stores the pokemon that a particular pokemon evolves from
 	public static void evolutionsParser(Document evolutionsFile) {
 		String s = new String();
 		Elements table = htmlEvolutionsFile.getElementsByClass("infocard-evo-list");
@@ -865,17 +790,17 @@ public class WebsiteParser {
 			System.out.println(textSplit.get(i));
 		
 	}
-
+	// runs the functions
 	public static void main(String[] args) throws IOException, NumberFormatException, SQLException {
 
 		// creates the url files to pull data from and the array of pokemon
 		WebsiteParser wp = new WebsiteParser();
 		
 		
-		evolutionsParser(wp.htmlEvolutionsFile);
+		//evolutionsParser(wp.htmlEvolutionsFile);
 		
 		
-		/*// pulls number, name, type1name, type2name, and stats of pokemon
+		// pulls number, name, type1name, type2name, and stats of pokemon
 		urlStatsParser(wp.htmlStatsFile);
 		
 		// converts type1name and type2name into id for the database
@@ -892,13 +817,8 @@ public class WebsiteParser {
 		
 		for (Pokemon p : pokemonArray) {
 			System.out.println(p.pokemonNum + " " + p.pokemonName + " " + p.height + " " + p.weight + " " + p.type1ID + " " + p.type2ID + " " + p.habitatID);
-			//System.out.println(p.pokemonNum + " " + p.pokemonName + " " + p.type1Name + " " + p.type2Name + " " + p.totalPts);
-		}*/
-
-
+		}
 	}
-
-
 }
 
 

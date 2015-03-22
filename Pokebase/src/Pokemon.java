@@ -23,6 +23,8 @@ public class Pokemon {
 	double weight;
 	File sprite;
 	File shinySprite;
+	String evolvesFrom;
+	String evolutionMethod;
 	
 	
 	public Pokemon() {
@@ -47,6 +49,8 @@ public class Pokemon {
 		weight = -1;
 		sprite = null;
 		shinySprite = null;
+		evolvesFrom = null;
+		evolutionMethod = null;
 		
 	}
 	
