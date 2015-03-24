@@ -784,10 +784,29 @@ public class WebsiteParser {
 				textSplit.remove(i);
 			}
 		}
+
 		
-		
-		for (int i = 0; i < textSplit.size(); i++)
-			System.out.println(textSplit.get(i));
+		for (int i = 0; i < textSplit.size(); i++) {
+			if (textSplit.get(i).length() == 1) {
+				String pokemon1 = textSplit.get(i-1);
+				String pokemon2 = textSplit.get(i+3);
+				String method = textSplit.get(i+1);
+
+				for (Pokemon p : pokemonArray) {
+					if (p.pokemonName.contains(pokemon2)) {
+						p.evolvesFrom = pokemon1;
+						p.evolutionMethod = method.substring(1, method.length()-1);
+						
+						// special case for female/male nidoran
+						if (p.pokemonName.contains("Nidorina"))
+							p.evolvesFrom = "Nidoran, Female";
+						if (p.pokemonName.contains("Nidorino"))
+							p.evolvesFrom = "Nidoran, Male";
+						
+					}
+				}
+			}
+		}
 		
 	}
 	// runs the functions
@@ -797,7 +816,6 @@ public class WebsiteParser {
 		WebsiteParser wp = new WebsiteParser();
 		
 		
-		//evolutionsParser(wp.htmlEvolutionsFile);
 		
 		
 		// pulls number, name, type1name, type2name, and stats of pokemon
@@ -815,12 +833,10 @@ public class WebsiteParser {
 		// convert heights from meters to inches
 		convertHeights(pokemonArray);
 		
+		evolutionsParser(wp.htmlEvolutionsFile);
+		
 		Pokemon.printPokemonArray(pokemonArray);
 		
-		/*System.out.println("Number " + "Name " + "Height " + "Weight " + "Type1ID " + "Type2ID " + "HabitatID ");
-		for (Pokemon p : pokemonArray) {
-			System.out.println(p.pokemonNum + " " + p.pokemonName + " " + p.height + " " + p.weight + " " + p.type1ID + " " + p.type2ID + " " + p.habitatID);
-		}*/
 	}
 }
 
