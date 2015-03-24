@@ -815,9 +815,12 @@ public class WebsiteParser {
 		// convert heights from meters to inches
 		convertHeights(pokemonArray);
 		
+		Pokemon.printPokemonArray(pokemonArray);
+		
+		/*System.out.println("Number " + "Name " + "Height " + "Weight " + "Type1ID " + "Type2ID " + "HabitatID ");
 		for (Pokemon p : pokemonArray) {
 			System.out.println(p.pokemonNum + " " + p.pokemonName + " " + p.height + " " + p.weight + " " + p.type1ID + " " + p.type2ID + " " + p.habitatID);
-		}
+		}*/
 	}
 }
 

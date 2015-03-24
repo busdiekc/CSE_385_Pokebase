@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.ArrayList;
 
 
 public class Pokemon {
@@ -51,6 +52,16 @@ public class Pokemon {
 		shinySprite = null;
 		evolvesFrom = null;
 		evolutionMethod = null;
+		
+	}
+	// print all information for all pokemon in the array argument
+	public static void printPokemonArray(ArrayList<Pokemon> array) {
+		System.out.printf("%-6s %-26s %-10s %-9s %-10s %-9s %-8s %-5s %-5s %-5s %-5s %-5s %-5s %-11s %-10s %-7s %-7s %-15s %-10s\n", "Number", "Name", "Type1Name", "Type1ID", "Type2Name", 
+				"Type2ID", "TotalPts", "HP", "Atk", "Def", "SpAtk", "SpDef", "Spd", "HabitatName", "HabitatID", "Weight", 
+				"Height", "EvolvesFrom", "Method");
+		for (Pokemon p : array) {
+			System.out.printf("%-6d %-26s %-10s %-9d %-10s %-9d %-8d %-5d %-5d %-5d %-5d %-5d %-5d %-11s %-10d %-7.2f %-7.2f %-15s %-10s\n", p.pokemonNum, p.pokemonName, p.type1Name, p.type1ID, p.type2Name, p.type2ID, p.totalPts, p.hp, p.atk, p.def, p.spAtk, p.spDef, p.spd, p.habitatName, p.habitatID, p.weight, p.height, p.evolvesFrom, p.evolutionMethod);
+		}
 		
 	}
 	
