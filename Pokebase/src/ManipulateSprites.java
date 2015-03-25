@@ -62,7 +62,7 @@ public class ManipulateSprites {
 		ps = c.prepareStatement("insert into sprites (PokemonID, Name, Picture, ShinyPicture) values (?, ?, ?, ?)");
 		
 		ps.setInt(1, pokemonID);
-			pokemonName = pokemonName.substring(0, 1).toUpperCase() + pokemonName.substring(1);
+		pokemonName = pokemonName.substring(0, 1).toUpperCase() + pokemonName.substring(1);
 		ps.setString(2, pokemonName);
 		ps.setBinaryStream(3, picStream, (int) pic.length());
 		ps.setBinaryStream(4, shinyPicStream, (int) shinyPic.length());

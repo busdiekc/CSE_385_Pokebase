@@ -1,3 +1,4 @@
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,10 +22,12 @@ public class WebsiteParser {
 	String urlWeightsHeights;
 	String urlHabitats;
 	String urlEvolutions;
+	String urlSprites;
 	static Document htmlStatsFile;
 	static Document htmlWeightsHeightsFile;
 	static Document htmlHabitatFile;
 	static Document htmlEvolutionsFile;
+	static Document htmlSpritesFile;
 	static ArrayList<Pokemon> pokemonArray;
 
 	// Constructor establishes connections to the webpages that data will be pulled from
@@ -37,6 +40,8 @@ public class WebsiteParser {
 		htmlHabitatFile = Jsoup.connect(urlHabitats).get();
 		urlEvolutions = "http://pokemondb.net/evolution";
 		htmlEvolutionsFile = Jsoup.connect(urlEvolutions).get();
+		urlSprites = "http://pokemondb.net/sprites";
+		htmlSpritesFile = Jsoup.connect(urlSprites).get();
 		pokemonArray = new ArrayList<Pokemon>();
 	}
 	// retrieve the typeID from the database table Types to put in each pokemon's typeID variable
@@ -809,20 +814,43 @@ public class WebsiteParser {
 		}
 		
 	}
+	
+	public static void spriteDownloader(ArrayList<Pokemon> pokemonArray) throws IOException, InterruptedException {
+		Elements table = htmlSpritesFile.getElementsByClass("infocard-list-compact");
+		// the 2 for loops and if statement isolate the url extension for every pokemon listed on the sprites page
+		for (Element gen : table) {
+			for (Element x : gen.getElementsByAttribute("href")) {
+				if (x.hasAttr("href")) {
+					System.out.println(x.attr("href"));
+					String pokemonUrl = "http://pokemondb.net" + x.attr("href");
+					System.out.println(pokemonUrl);
+					Connection c = Jsoup.connect(pokemonUrl).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36")
+							.timeout(5000);
+					Connection.Response response = c.execute();
+					Document pokemonSpritePage = c.get();
+					System.out.println(pokemonSpritePage.getElementsByAttributeValueStarting("href", "http://img.pokemondb.net/sprites/black-white/normal/"));
+				}
+				// overloads the pokemondb.net servers if you don't wait resulting in http:503 error
+				synchronized(x){
+				x.wait(900);
+				}
+			}
+		}
+	}
 	// runs the functions
-	public static void main(String[] args) throws IOException, NumberFormatException, SQLException {
+	public static void main(String[] args) throws IOException, NumberFormatException, SQLException, InterruptedException {
 
 		// creates the url files to pull data from and the array of pokemon
 		WebsiteParser wp = new WebsiteParser();
 		
 		
+		spriteDownloader(wp.pokemonArray);
 		
-		
-		// pulls number, name, type1name, type2name, and stats of pokemon
+		/*// pulls number, name, type1name, type2name, and stats of pokemon
 		urlStatsParser(wp.htmlStatsFile);
 		
 		// converts type1name and type2name into id for the database
-		getTypeIDS(pokemonArray);
+		getTypeIDS(wp.pokemonArray);
 		
 		// pulls height
 		getHeight(wp.htmlWeightsHeightsFile);
@@ -831,11 +859,11 @@ public class WebsiteParser {
 		getWeight(wp.htmlWeightsHeightsFile);
 	
 		// convert heights from meters to inches
-		convertHeights(pokemonArray);
+		convertHeights(wp.pokemonArray);
 		
 		evolutionsParser(wp.htmlEvolutionsFile);
 		
-		Pokemon.printPokemonArray(pokemonArray);
+		Pokemon.printPokemonArray(wp.pokemonArray);*/
 		
 	}
 }
