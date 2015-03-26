@@ -1,4 +1,4 @@
-Last Edit: 03/21/2015 by Kyle B
+Last Edit: 03/26/2015 by Kyle Busdieker
 
 I will attempt to explain all of the changes that I have made to Pokebase. It has
 been a few months so I might forget a thing here or there. If you have questions, ask 
@@ -32,6 +32,13 @@ array with name, mega, types, stats. I also discovered that not all of the mega 
 list on pokemondb.net, some you have to click the specific pokemon to see their mega evolution (e.g. Swampert). With 
 this in mind I do not guaruntee that I have correctly parsed the mega pokemon. I think I did a good job, but I can't 
 be sure.
+
+WebsiteParser now has three new methods: evolutionsParser(), spriteDownloader(), and saveSprite(). EvolutionsParser() 
+successfully pulls the evolution chain information from the website and puts in the appropriate pokemon object from whom 
+a pokemon evolves from and the method it evolves with. SpriteDownloader() successfully pulls the normal and shiny sprites 
+of most of the pokemon from the website and using saveSprite() saves them to a common folder on my hard drive. I believe 
+that all mega evolutions and various forms are skipped over because they are not presented in the list of pokemon on the 
+webpage. Probably gonna have to add those in manually.
 
 Running just this file currently prints out the ID, name, height, weight, type1, type2, and non-updated habitatID for 
 every pokemon in the pokemonArray, which is all of them unless any mega evolutions have been skipped due to the problem 

@@ -4,12 +4,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import javax.imageio.ImageIO;
 
 
 // Author: Kyle Busdieker
@@ -63,23 +72,14 @@ public class WebsiteParser {
 	}
 
 	static void urlStatsParser(Document statsFile) throws IOException {
-
 		Elements table = statsFile.select("table");
-
 		for (Element row : table.select("tr")) {
-
 			Elements tds = row.select("td");
-
 			if (!tds.isEmpty()) {
-
 				Pokemon p = new Pokemon();
-
 				p.pokemonPulledInfo = tds.text();
-
 				String[] pStatsInfoSplit = p.pokemonPulledInfo.split(" ");
-
 				if (pStatsInfoSplit.length == 10) {
-
 					p.pokemonNum = Integer.parseInt(pStatsInfoSplit[0]);
 					p.pokemonName = pStatsInfoSplit[1];
 					p.type1Name = pStatsInfoSplit[2];
@@ -91,23 +91,14 @@ public class WebsiteParser {
 					p.spAtk = Integer.parseInt(pStatsInfoSplit[7]);
 					p.spDef = Integer.parseInt(pStatsInfoSplit[8]);
 					p.spd = Integer.parseInt(pStatsInfoSplit[9]);
-					
 					// special case for Nidoran female
-					if (Integer.parseInt(pStatsInfoSplit[0]) == 29) {
-						
+					if (Integer.parseInt(pStatsInfoSplit[0]) == 29)
 						p.pokemonName = "Nidoran, Female";
-					}
-					
 					// special case for Nidoran male
-					if (Integer.parseInt(pStatsInfoSplit[0]) == 32) {
-						
+					if (Integer.parseInt(pStatsInfoSplit[0]) == 32)
 						p.pokemonName = "Nidoran, Male";
-					}
-
 				}
-
 				else if (pStatsInfoSplit.length == 11) {
-
 					p.pokemonNum = Integer.parseInt(pStatsInfoSplit[0]);
 					p.pokemonName = pStatsInfoSplit[1];
 					p.type1Name = pStatsInfoSplit[2];
@@ -118,10 +109,8 @@ public class WebsiteParser {
 					p.def = Integer.parseInt(pStatsInfoSplit[7]);
 					p.spAtk = Integer.parseInt(pStatsInfoSplit[8]);
 					p.spDef = Integer.parseInt(pStatsInfoSplit[9]);
-					p.spd = Integer.parseInt(pStatsInfoSplit[10]);
-					
+					p.spd = Integer.parseInt(pStatsInfoSplit[10]);					
 					if (p.pokemonPulledInfo.contains("Meowstic Male")) {
-						
 						p.pokemonName = "Meowstic, Male";
 						p.type1Name = pStatsInfoSplit[3];
 						p.type2Name = "none";
@@ -132,10 +121,8 @@ public class WebsiteParser {
 						p.spAtk = Integer.parseInt(pStatsInfoSplit[8]);
 						p.spDef = Integer.parseInt(pStatsInfoSplit[9]);
 						p.spd = Integer.parseInt(pStatsInfoSplit[10]);
-					}
-					
+					}					
 					if (p.pokemonPulledInfo.contains("Meowstic Female")) {
-						
 						p.pokemonName = "Meowstic, Female";
 						p.type1Name = pStatsInfoSplit[3];
 						p.type2Name = "none";
@@ -147,18 +134,13 @@ public class WebsiteParser {
 						p.spDef = Integer.parseInt(pStatsInfoSplit[9]);
 						p.spd = Integer.parseInt(pStatsInfoSplit[10]);
 					}
-
 				}
-
 				else if (pStatsInfoSplit.length == 12) {
-
 					p.pokemonNum = Integer.parseInt(pStatsInfoSplit[0]);
-
 					if (pStatsInfoSplit[3].compareTo(pStatsInfoSplit[1]) != 0)
 						p.pokemonName = pStatsInfoSplit[1] + ", " + pStatsInfoSplit[2] + " " + pStatsInfoSplit[3];
 					else
 						p.pokemonName = pStatsInfoSplit[1] + ", " + pStatsInfoSplit[2];
-
 					p.type1Name = pStatsInfoSplit[4];
 					p.type2Name = "none";
 					p.totalPts = Integer.parseInt(pStatsInfoSplit[5]);
@@ -168,9 +150,7 @@ public class WebsiteParser {
 					p.spAtk = Integer.parseInt(pStatsInfoSplit[9]);
 					p.spDef = Integer.parseInt(pStatsInfoSplit[10]);
 					p.spd = Integer.parseInt(pStatsInfoSplit[11]);
-					
 					if (pStatsInfoSplit[1].contains("Kyurem")) {
-						
 						p.pokemonName = pStatsInfoSplit[1];
 						p.type1Name = pStatsInfoSplit[3];
 						p.type2Name = pStatsInfoSplit[4];
@@ -181,12 +161,9 @@ public class WebsiteParser {
 						p.spAtk = Integer.parseInt(pStatsInfoSplit[9]);
 						p.spDef = Integer.parseInt(pStatsInfoSplit[10]);
 						p.spd = Integer.parseInt(pStatsInfoSplit[11]);
-
 					}
-
 					// mr. mime special case
 					else if (pStatsInfoSplit[1].contains("Mr.")) {
-
 						p.pokemonName = pStatsInfoSplit[1] + " " + pStatsInfoSplit[2];
 						p.type1Name = pStatsInfoSplit[3];
 						p.type2Name = pStatsInfoSplit[4];
@@ -197,12 +174,9 @@ public class WebsiteParser {
 						p.spAtk = Integer.parseInt(pStatsInfoSplit[9]);
 						p.spDef = Integer.parseInt(pStatsInfoSplit[10]);
 						p.spd = Integer.parseInt(pStatsInfoSplit[11]);
-
 					}
-
 					// mime jr. special case
 					else if (pStatsInfoSplit[1].contains("Mime")) {
-
 						p.pokemonName = pStatsInfoSplit[1] + " " + pStatsInfoSplit[2];
 						p.type1Name = pStatsInfoSplit[3];
 						p.type2Name = pStatsInfoSplit[4];
@@ -213,20 +187,14 @@ public class WebsiteParser {
 						p.spAtk = Integer.parseInt(pStatsInfoSplit[9]);
 						p.spDef = Integer.parseInt(pStatsInfoSplit[10]);
 						p.spd = Integer.parseInt(pStatsInfoSplit[11]);
-
 					}
-
 				}
-
 				else if (pStatsInfoSplit.length == 13) {
-
 					p.pokemonNum = Integer.parseInt(pStatsInfoSplit[0]);
-
 					if (pStatsInfoSplit[3].compareTo(pStatsInfoSplit[1]) == 0)
 						p.pokemonName = pStatsInfoSplit[1] + ", " + pStatsInfoSplit[2];
 					else
 						p.pokemonName = pStatsInfoSplit[1] + ", " + pStatsInfoSplit[2] + " " + pStatsInfoSplit[3];
-					
 					p.type1Name = pStatsInfoSplit[4];
 					p.type2Name = pStatsInfoSplit[5];
 					p.totalPts = Integer.parseInt(pStatsInfoSplit[6]);
@@ -236,9 +204,7 @@ public class WebsiteParser {
 					p.spAtk = Integer.parseInt(pStatsInfoSplit[10]);
 					p.spDef = Integer.parseInt(pStatsInfoSplit[11]);
 					p.spd = Integer.parseInt(pStatsInfoSplit[12]);
-					
 					if (p.pokemonPulledInfo.contains("Mewtwo Y")) {
-						
 						p.pokemonName = "Mewtwo, Mega Y";
 						p.type1Name = pStatsInfoSplit[5];
 						p.type2Name = "none";
@@ -249,22 +215,14 @@ public class WebsiteParser {
 						p.spAtk = Integer.parseInt(pStatsInfoSplit[10]);
 						p.spDef = Integer.parseInt(pStatsInfoSplit[11]);
 						p.spd = Integer.parseInt(pStatsInfoSplit[12]);
-						
 					}
-					
-					
-
 				}
-
 				else if (pStatsInfoSplit.length == 14) {
-
 					p.pokemonNum = Integer.parseInt(pStatsInfoSplit[0]);
-
 					if (pStatsInfoSplit[3].compareTo(pStatsInfoSplit[1]) == 0)
 						p.pokemonName = pStatsInfoSplit[1] + ", " + pStatsInfoSplit[2] + " " + pStatsInfoSplit[4];
 					else
 						p.pokemonName = pStatsInfoSplit[1] + ", " + pStatsInfoSplit[2] + " " + pStatsInfoSplit[3] + " " + pStatsInfoSplit[4];
-					
 					p.type1Name = pStatsInfoSplit[5];
 					p.type2Name = pStatsInfoSplit[6];
 					p.totalPts = Integer.parseInt(pStatsInfoSplit[7]);
@@ -274,13 +232,9 @@ public class WebsiteParser {
 					p.spAtk = Integer.parseInt(pStatsInfoSplit[11]);
 					p.spDef = Integer.parseInt(pStatsInfoSplit[12]);
 					p.spd = Integer.parseInt(pStatsInfoSplit[13]);
-					
 				}
-				
 				pokemonArray.add(p);
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 15) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 15;
 					pp.pokemonName = "Beedrill, Mega";
@@ -293,12 +247,9 @@ public class WebsiteParser {
 					pp.spAtk = 15;
 					pp.spDef = 80;
 					pp.spd = 145;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 18) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 18;
 					pp.pokemonName = "Pidgeot, Mega";
@@ -311,12 +262,9 @@ public class WebsiteParser {
 					pp.spAtk = 135;
 					pp.spDef = 80;
 					pp.spd = 121;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 80) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 80;
 					pp.pokemonName = "Slowbro, Mega";
@@ -329,12 +277,9 @@ public class WebsiteParser {
 					pp.spAtk = 130;
 					pp.spDef = 80;
 					pp.spd = 30;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 254) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 254;
 					pp.pokemonName = "Sceptile, Mega";
@@ -347,12 +292,9 @@ public class WebsiteParser {
 					pp.spAtk = 145;
 					pp.spDef = 85;
 					pp.spd = 145;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 260) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 260;
 					pp.pokemonName = "Swampert, Mega";
@@ -365,12 +307,9 @@ public class WebsiteParser {
 					pp.spAtk = 95;
 					pp.spDef = 110;
 					pp.spd = 70;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 302) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 302;
 					pp.pokemonName = "Sableye, Mega";
@@ -383,12 +322,9 @@ public class WebsiteParser {
 					pp.spAtk = 85;
 					pp.spDef = 115;
 					pp.spd = 20;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 319) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 319;
 					pp.pokemonName = "Sharpedo, Mega";
@@ -401,12 +337,9 @@ public class WebsiteParser {
 					pp.spAtk = 110;
 					pp.spDef = 65;
 					pp.spd = 105;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 323) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 323;
 					pp.pokemonName = "Camerupt, Mega";
@@ -419,12 +352,9 @@ public class WebsiteParser {
 					pp.spAtk = 145;
 					pp.spDef = 105;
 					pp.spd = 20;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 334) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 334;
 					pp.pokemonName = "Altaria, Mega";
@@ -437,12 +367,9 @@ public class WebsiteParser {
 					pp.spAtk = 110;
 					pp.spDef = 105;
 					pp.spd = 80;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 354) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 354;
 					pp.pokemonName = "Banette, Mega";
@@ -455,12 +382,9 @@ public class WebsiteParser {
 					pp.spAtk = 93;
 					pp.spDef = 83;
 					pp.spd = 75;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 373) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 373;
 					pp.pokemonName = "Salamence, Mega";
@@ -473,12 +397,9 @@ public class WebsiteParser {
 					pp.spAtk = 120;
 					pp.spDef = 90;
 					pp.spd = 120;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 376) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 376;
 					pp.pokemonName = "Metagross, Mega";
@@ -491,12 +412,9 @@ public class WebsiteParser {
 					pp.spAtk = 105;
 					pp.spDef = 110;
 					pp.spd = 110;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 380) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 380;
 					pp.pokemonName = "Latias, Mega";
@@ -509,12 +427,9 @@ public class WebsiteParser {
 					pp.spAtk = 140;
 					pp.spDef = 150;
 					pp.spd = 110;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 381) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 381;
 					pp.pokemonName = "Latios, Mega";
@@ -527,12 +442,9 @@ public class WebsiteParser {
 					pp.spAtk = 160;
 					pp.spDef = 120;
 					pp.spd = 110;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 382) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 382;
 					pp.pokemonName = "Kyogre, Primal";
@@ -545,12 +457,9 @@ public class WebsiteParser {
 					pp.spAtk = 180;
 					pp.spDef = 160;
 					pp.spd = 90;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 383) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 383;
 					pp.pokemonName = "Groudon, Primal";
@@ -563,12 +472,9 @@ public class WebsiteParser {
 					pp.spAtk = 150;
 					pp.spDef = 90;
 					pp.spd = 90;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 384) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 384;
 					pp.pokemonName = "Rayquaza, Primal";
@@ -581,12 +487,9 @@ public class WebsiteParser {
 					pp.spAtk = 180;
 					pp.spDef = 100;
 					pp.spd = 115;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 428) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 428;
 					pp.pokemonName = "Lopunny, Mega";
@@ -599,12 +502,9 @@ public class WebsiteParser {
 					pp.spAtk = 54;
 					pp.spDef = 96;
 					pp.spd = 135;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 475) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 475;
 					pp.pokemonName = "Gallade, Mega";
@@ -617,12 +517,9 @@ public class WebsiteParser {
 					pp.spAtk = 65;
 					pp.spDef = 115;
 					pp.spd = 110;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 531) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 531;
 					pp.pokemonName = "Audino, Mega";
@@ -635,12 +532,9 @@ public class WebsiteParser {
 					pp.spAtk = 80;
 					pp.spDef = 126;
 					pp.spd = 50;
-					
 					pokemonArray.add(pp);
 				}
-				
 				if (Integer.parseInt(pStatsInfoSplit[0]) == 719) {
-					
 					Pokemon pp = new Pokemon();
 					pp.pokemonNum = 719;
 					pp.pokemonName = "Diancie, Mega";
@@ -653,14 +547,10 @@ public class WebsiteParser {
 					pp.spAtk = 160;
 					pp.spDef = 110;
 					pp.spd = 110;
-					
 					pokemonArray.add(pp);
 				}
-				
 			}
-			
 		}
-
 	}
 	// converts the a pokemon's height given in meters to inches
 	static void convertHeights(ArrayList<Pokemon> pokemon) {
@@ -821,14 +711,12 @@ public class WebsiteParser {
 		for (Element gen : table) {
 			for (Element x : gen.getElementsByAttribute("href")) {
 				if (x.hasAttr("href")) {
-					System.out.println(x.attr("href"));
 					String pokemonUrl = "http://pokemondb.net" + x.attr("href");
-					System.out.println(pokemonUrl);
-					Connection c = Jsoup.connect(pokemonUrl).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36")
-							.timeout(5000);
-					Connection.Response response = c.execute();
-					Document pokemonSpritePage = c.get();
-					System.out.println(pokemonSpritePage.getElementsByAttributeValueStarting("href", "http://img.pokemondb.net/sprites/black-white/normal/"));
+					Document pokemonSpritePage = Jsoup.connect(pokemonUrl).userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36").get();
+					for (Element y : pokemonSpritePage.getElementsByAttributeValueStarting("href", "http://img.pokemondb.net/sprites/black-white/normal/"))
+						saveSprite(y.attr("href").toString());
+					for (Element y : pokemonSpritePage.getElementsByAttributeValueStarting("href", "http://img.pokemondb.net/sprites/black-white/shiny/"))
+						saveSprite(y.attr("href").toString());
 				}
 				// overloads the pokemondb.net servers if you don't wait resulting in http:503 error
 				synchronized(x){
@@ -837,11 +725,33 @@ public class WebsiteParser {
 			}
 		}
 	}
+	
+	public static void saveSprite(String spriteUrl) throws IOException {
+		URL url = new URL(spriteUrl);
+		String fileName = url.getFile();
+		if (fileName.contains("shiny"))
+			fileName = fileName.substring(fileName.lastIndexOf("/")+1, fileName.lastIndexOf(".")) + " (1).png";
+		else
+			fileName = fileName.substring(fileName.lastIndexOf("/")+1);
+		String destName = "C:/Pokemon_Sprites/" + fileName;
+		InputStream spriteStream = url.openStream();
+		OutputStream fileStream = new FileOutputStream(destName);
+		
+		byte[] bytes = new byte[2048];
+		int length;
+		while ((length = spriteStream.read(bytes)) != -1)
+			fileStream.write(bytes, 0, length);
+		
+		spriteStream.close();
+		fileStream.close();
+		System.out.println("Sprite saved to: " + destName);
+	}
 	// runs the functions
 	public static void main(String[] args) throws IOException, NumberFormatException, SQLException, InterruptedException {
 
 		// creates the url files to pull data from and the array of pokemon
 		WebsiteParser wp = new WebsiteParser();
+		
 		
 		
 		spriteDownloader(wp.pokemonArray);

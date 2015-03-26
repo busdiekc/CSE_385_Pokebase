@@ -26,6 +26,8 @@ public class Pokemon {
 	File shinySprite;
 	String evolvesFrom;
 	String evolutionMethod;
+	String spriteUrl;
+	String shinySpriteUrl;
 	
 	
 	public Pokemon() {
@@ -52,6 +54,8 @@ public class Pokemon {
 		shinySprite = null;
 		evolvesFrom = null;
 		evolutionMethod = null;
+		spriteUrl = null;
+		shinySpriteUrl = null;
 		
 	}
 	// print all information for all pokemon in the array argument
