@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 
-
+//testing git ssh stuff
 public class Pokemon {
 	
 	String pokemonPulledInfo;
