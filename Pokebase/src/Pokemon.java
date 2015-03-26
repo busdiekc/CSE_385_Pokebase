@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 
-//more more more more moretesting
+//last test
 public class Pokemon {
 	
 	String pokemonPulledInfo;
